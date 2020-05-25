@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "bf2mod_csc/pl/explosives_expert"
+	"$translucent" 1
+}

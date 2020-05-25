@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "bf2mod_csc/pl/m249_profesional"
+	"$translucent" 1
+}
