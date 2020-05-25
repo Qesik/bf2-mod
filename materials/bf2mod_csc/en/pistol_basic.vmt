@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "bf2mod_csc/en/pistol_basic"
+	"$translucent" 1
+}
