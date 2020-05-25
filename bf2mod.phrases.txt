@@ -1,0 +1,841 @@
+"Phrases"
+{
+	"tb error load data"	// chat
+	{
+		"en"			"Error! Your data was not loaded correctly! Try reconnecting."
+		"pl"			"Błąd danych. Wykonaj reconnect"
+	}
+	"tb info rank"	// chat
+	{
+		"#format"		"{1:s},{2:d}"
+		"en"			"Your Rank: @green{1} @default| Kills: @green{2}"
+		"pl"			"Twoja ranga: @green{1} @default| Zabójstw: @green{2}"
+	}
+	"tb player disconnected"	// chat
+	{
+		"en"			"@redPlayer disconnected!"
+		"pl"			"@redGracz rozłączył się!"
+	}
+	"tb new badges"	// chat
+	{
+		"#format"		"{1:t}"
+		"en"			"You have been awarded: @green{1} badges!"
+		"pl"			"Zdobyłeś odznakę: @green{1}!"
+	}
+	"tb new level rank"	// chat
+	{
+		"#format"		"{1:s}"
+		"en"			"You have been promoted to the rank of @green{1}!"
+		"pl"			"Awansowałeś do rangi: @green{1}!"
+	}
+	"tb freeze client"	// chat
+	{
+		"#format"		"{1:N}"
+		"en"			"You frozen the player @green{1}@default!"
+		"pl"			"Zamroziłeś gracza @green{1}@default!"
+	}
+	"tb top1 map"	// chat
+	{
+		"#format"		"{1:N},{2:d}"
+		"en"			"@green{1} @default- Gold Medal- @green{2} @defaultkills"
+		"pl"			"@green{1} @default- Złoty Medal- @green{2} @defaultZabójstw"
+	}
+	"tb top2 map"	// chat
+	{
+		"#format"		"{1:N},{2:d}"
+		"en"			"@green{1} @default- Silver Medal- @green{2} @defaultkills"
+		"pl"			"@green{1} @default- Srebrny Medal- @green{2} @defaultZabójstw"
+	}
+	"tb top3 map"	// chat
+	{
+		"#format"		"{1:N},{2:d}"
+		"en"			"@green{1} @default- Bronze Medal - @green{2} @defaultkills"
+		"pl"			"@green{1} @default- Brązowy Medal- @green{2} @defaultZabójstw"
+	}
+
+
+
+	"MenuClientRanksTitle"	// menu
+	{
+		"#format"		"{1:s},{2:d}"
+		"en"			"Rank: {1}\nFrags: {2}"
+		"pl"			"Ranga: {1}\nFragi: {2}"
+	}
+	"MenuClientRanksTitle2"	// menu
+	{
+		"#format"		"{1:s},{2:s}"
+		"en"			"{1}\nNext Rank: {2}"
+		"pl"			"{1}\nNastępna Ranga: {2}"
+	}
+	"MenuClientRanksTitle3"	// menu
+	{
+		"#format"		"{1:s},{2:d}"
+		"en"			"{1}\nRequirements {2} frags"
+		"pl"			"{1}\nWymagane {2} zabójstwa"
+	}
+	"MenuClientRanksList"	// menu
+	{
+		"en"			"Rank List"
+		"pl"			"Lista Rang"
+	}
+
+	"MenuListRanksTitle"	// menu
+	{
+		"en"			"BF2: Ranks available on the server"
+		"pl"			"BF2: Rangi dostępne na serwerze"
+	}
+	"MenuListRanksDesc"	// menu
+	{
+		"#format"		"{1:s},{2:d}"
+		"en"			"{1} ({2} frags)"
+		"pl"			"{1} ({2} zabójstw)"
+	}
+
+	"MenuClientStatsTitle"	// menu
+	{
+		"#format"		"{1:N}"
+		"en"			"BF2: Players stats: {1}"
+		"pl"			"BF2: Statystyki Graczy: {1}"
+	}
+	"MenuClientStatsKills"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global Kills: {1}"
+		"pl"			"Ogólne Zabicia: {1}"
+	}
+	"MenuClientStatsKillsKnife"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global Knife Kills: {1}"
+		"pl"			"Ogólne Zabicia z Noża: {1}"
+	}
+	"MenuClientStatsKillsPistol"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global Pistol Kills: {1}"
+		"pl"			"Ogólne Zabicia Pistoletami: {1}"
+	}
+	"MenuClientStatsKillsM249"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global M249 Kills: {1}"
+		"pl"			"Ogólne Zabicia M249: {1}"
+	}
+	"MenuClientStatsKillsSniper"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global Sniper Kills: {1}"
+		"pl"			"Ogólne Zabicia Snajperkami: {1}"
+	}
+	"MenuClientStatsKillsRifle"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global Rifle Kills: {1}"
+		"pl"			"Ogólne Zabicia Karabinami: {1}"
+	}
+	"MenuClientStatsKillsShotgun"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global Shotgun Kills: {1}"
+		"pl"			"Ogólne Zabicia Shotgunami: {1}"
+	}
+	"MenuClientStatsKillsSMG"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global SMG Kills: {1}"
+		"pl"			"Ogólne Zabicia z SMG: {1}"
+	}
+	"MenuClientStatsKillsGrenade"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global Grenade Kills: {1}"
+		"pl"			"Ogólne Zabicia z Granatów: {1}"
+	}
+	"MenuClientStatsKillsAccuracy"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global Accuracy: %d percent {1}"
+		"pl"			"Ogólna Celność: %d procent: {1}"
+	}
+	"MenuClientStatsPlantBomb"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global Bomb Plants: {1}"
+		"pl"			"Ilość Podłożonych Bomb: {1}"
+	}
+	"MenuClientStatsExplodedBomb"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global Bomb Explosions: {1}"
+		"pl"			"Ilość Bomb które wybuchły: {1}"
+	}
+	"MenuClientStatsDefuseBomb"	// menu
+	{
+		"#format"		"{1:d}"
+		"en"			"Global Bomb Defuses: {1}"
+		"pl"			"Ilość Rozbrojonych Bomb: {1}"
+	}
+	"MenuClientStatsRank"	// menu
+	{
+		"#format"		"{1:s}"
+		"en"			"Rank: {1}"
+		"pl"			"Ranga gracza: {1}"
+	}
+	"MenuClientStatsMedal"	// menu
+	{
+		"#format"		"{1:d},{2:d},{3:d}"
+		"en"			"Medals Earned: Gold {1} | Silver {2} | Bronze {3}"
+		"pl"			"Zdobyte Medale: Złote {1} | Srebrne {2} | Brązowe {3}"
+	}
+
+	"MenuBF2Title"	// menu
+	{
+		"en"			"BF2: Main menu"
+		"pl"			"BF2: Menu Główne"
+	}
+	"MenuBF2Help"	// menu
+	{
+		"en"			"Help"
+		"pl"			"Pomoc"
+	}
+	"MenuBF2Stats"	// menu
+	{
+		"en"			"Stats"
+		"pl"			"Statystyki"
+	}
+	"MenuBF2PanelAdmin"	// menu
+	{
+		"en"			"Admin Panel"
+		"pl"			"Panel admina"
+	}
+
+	"MenuBF2HelpTitle"	// menu
+	{
+		"en"			"BF2: Help"
+		"pl"			"BF2: Pomoc"
+	}
+	"MenuBF2HelpBadge1"	// menu
+	{
+		"en"			"Knife Combat"
+		"pl"			"Odznaka za Walkę Nożem"
+	}
+	"MenuBF2HelpBadge2"	// menu
+	{
+		"en"			"Pistol Combat"
+		"pl"			"Odznaka za Walkę Pistoletami"
+	}
+	"MenuBF2HelpBadge3"	// menu
+	{
+		"en"			"Assault Combat"
+		"pl"			"Odznaka Za Walkę Bronią Szturmową"
+	}
+	"MenuBF2HelpBadge4"	// menu
+	{
+		"en"			"Sniper Combat"
+		"pl"			"Odznaka za Walkę Bronią Snajperską"
+	}
+	"MenuBF2HelpBadge5"	// menu
+	{
+		"en"			"Support Combat"
+		"pl"			"Odznaka za Walkę Bronią Wsparcia"
+	}
+	"MenuBF2HelpBadge6"	// menu
+	{
+		"en"			"Explosives Ordinance"
+		"pl"			"Odznaka za Walkę Bronią Wybuchową"
+	}
+	"MenuBF2HelpBadge7"	// menu
+	{
+		"en"			"Shotgun Combat"
+		"pl"			"Odznaka za Walkę Shotgunam"
+	}
+	"MenuBF2HelpBadge8"	// menu
+	{
+		"en"			"SMG Combat"
+		"pl"			"Odznaka za Walkę SMG"
+	}
+
+	"MenuHelpBadgesTitle"	// menu
+	{
+		"#format"		"{1:t}"
+		"en"			"Desc. Badge\n{1}"
+		"pl"			"Opis Odznaki\n{1}"
+	}
+
+	"MenuBadgesInfoTitle"	// menu
+	{
+		"#format"		"{1:t},{2:t}"
+		"en"			"[BF2 MOD]\n{1}\nRequirements:\n{2}\nAward:"
+		"pl"			"[BF2 MOD]\n{1}\nWymagania:\n{2}\nNagroda:"
+	}
+
+	"MenuStatsBF2Title"	// menu
+	{
+		"en"			"BF2: Stats menu"
+		"pl"			"BF2: Menu Statystyk"
+	}
+	"MenuStatsBF2ListPlayers"	// menu
+	{
+		"en"			"Show Player List"
+		"pl"			"Pokaż Listę Graczy"
+	}
+	"MenuStatsBF2ClientBadges"	// menu
+	{
+		"en"			"Display your Badges"
+		"pl"			"Pokaż Twoje Odznaki"
+	}
+	"MenuStatsBF2ClientStats"	// menu
+	{
+		"en"			"Display your Stats"
+		"pl"			"Pokaż Twoje Statystyki"
+	}
+	"MenuStatsBF2ServerStats"	// menu
+	{
+		"en"			"Display TOP15"
+		"pl"			"Pokaż TOP15"
+	}
+
+	"MenuPlayersListTitle"	// menu
+	{
+		"en"			"Choose player:"
+		"pl"			"Wybierz gracza:"
+	}
+
+	"MenuClientBadgesTitle"	// menu
+	{
+		"#format"		"{1:N},{2:s},{3:d}"
+		"en"			"[BF2] {1}\nRank: {2}\nKills: {3}"
+		"pl"			"[BF2] {1}\nRanga: {2}\nZabójstw: {3}"
+	}
+	"MenuClientBadgesNoBadges"	// menu
+	{
+		"en"			"No Badges"
+		"pl"			"Brak odznak"
+	}
+
+	
+	"Name_Badge1_Basic"	// other
+	{
+		"en"			"Basic Knife Combat Badge"
+		"pl"			"Podstawowa walka Nożem"
+	}
+	"Name_Badge1_Veteran"	// other
+	{
+		"en"			"Veteran Knife Combat Badge"
+		"pl"			"Weteran w walce Nożem"
+	}
+	"Name_Badge1_Expert"	// other
+	{
+		"en"			"Expert Knife Combat Badge"
+		"pl"			"Ekspert w walce Nożem"
+	}
+	"Name_Badge1_Profesional"	// other
+	{
+		"en"			"Profesional Knife Combat Badge"
+		"pl"			"Profesjonalista w walce Nożem"
+	}
+	"Name_Badge2_Basic"	// other
+	{
+		"en"			"Basic Pistol Combat Badge"
+		"pl"			"Podstawowa walka Pistoletem"
+	}
+	"Name_Badge2_Veteran"	// other
+	{
+		"en"			"Veteran Pistol Combat Badge"
+		"pl"			"Weteran w walce z Pistoletem"
+	}
+	"Name_Badge2_Expert"	// other
+	{
+		"en"			"Expert Pistol Combat Badge"
+		"pl"			"Ekspert w walce z Pistoletem"
+	}
+	"Name_Badge2_Profesional"	// other
+	{
+		"en"			"Profesional Pistol Combat Badge"
+		"pl"			"Profesjonalista w walce z Pistoletem"
+	}
+	"Name_Badge3_Basic"	// other
+	{
+		"en"			"Basic Assault Combat Badge"
+		"pl"			"Podstawowa walka Bronią Szturmową"
+	}
+	"Name_Badge3_Veteran"	// other
+	{
+		"en"			"Veteran Assault Combat Badge"
+		"pl"			"Weteran w walce z Bronią Szturmową"
+	}
+	"Name_Badge3_Expert"	// other
+	{
+		"en"			"Expert Assault Combat Badge"
+		"pl"			"Ekspert w walce z Bronią Szturmową"
+	}
+	"Name_Badge3_Profesional"	// other
+	{
+		"en"			"Profesional Assault Combat Badge"
+		"pl"			"Profesjonalista w walce z Bronią Szturmową"
+	}
+	"Name_Badge4_Basic"	// other
+	{
+		"en"			"Basic Sniper Combat Badge"
+		"pl"			"Podstawowa walka Bronią Snajperską"
+	}
+	"Name_Badge4_Veteran"	// other
+	{
+		"en"			"Veteran Sniper Combat Badge"
+		"pl"			"Weteran w walce z Bronią Snajperską"
+	}
+	"Name_Badge4_Expert"	// other
+	{
+		"en"			"Expert Sniper Combat Badge"
+		"pl"			"Ekspert w walce z Bronią Snajperską"
+	}
+	"Name_Badge4_Profesional"	// other
+	{
+		"en"			"Profesional Sniper Combat Badge"
+		"pl"			"Profesjonalista w walce z Bronią Snajperską"
+	}
+	"Name_Badge5_Basic"	// other
+	{
+		"en"			"Basic Support Combat Badge"
+		"pl"			"Podstawowa walka Bronią Wsparcia"
+	}
+	"Name_Badge5_Veteran"	// other
+	{
+		"en"			"Veteran Support Combat Badge"
+		"pl"			"Weteran w walce Bronią Wsparcia"
+	}
+	"Name_Badge5_Expert"	// other
+	{
+		"en"			"Expert Support Combat Badge"
+		"pl"			"Ekspert w walce Bronią Wsparcia"
+	}
+	"Name_Badge5_Profesional"	// other
+	{
+		"en"			"Profesional Support Combat Badge"
+		"pl"			"Profesjonalista w walce Bronią Wsparcia"
+	}
+	"Name_Badge6_Basic"	// other
+	{
+		"en"			"Basic Explosives Ordinance Badge"
+		"pl"			"Podstawowe obeznanie w Materiałach Wybuchowych"
+	}
+	"Name_Badge6_Veteran"	// other
+	{
+		"en"			"Veteran Explosives Ordinance Badge"
+		"pl"			"Weteran w obeznaniu w Materiałach Wybuchowych"
+	}
+	"Name_Badge6_Expert"	// other
+	{
+		"en"			"Expert Explosives Ordinance Badge"
+		"pl"			"Ekspert w obeznaniu w Materiałach Wybuchowych"
+	}
+	"Name_Badge6_Profesional"	// other
+	{
+		"en"			"Profesional Explosives Ordinance Badge"
+		"pl"			"Profesjonalista w obeznaniu w Materiałach Wybuchowych"
+	}
+	"Name_Badge7_Basic"	// other
+	{
+		"en"			"Basic Shotgun Combat Badge"
+		"pl"			"Podstawowa walka z Shotgunem"
+	}
+	"Name_Badge7_Veteran"	// other
+	{
+		"en"			"Veteran Shotgun Combat Badge"
+		"pl"			"Weteran w walce z Shotgunem"
+	}
+	"Name_Badge7_Expert"	// other
+	{
+		"en"			"Expert Shotgun Combat Badge"
+		"pl"			"Ekspert w walce z Shotgunem"
+	}
+	"Name_Badge7_Profesional"	// other
+	{
+		"en"			"Profesional Shotgun Combat Badge"
+		"pl"			"Profesjonalista w walce z Shotgunem"
+	}
+	"Name_Badge8_Basic"	// other
+	{
+		"en"			"Basic SMG Combat Badge"
+		"pl"			"Podstawowa walka z SMG"
+	}
+	"Name_Badge8_Veteran"	// other
+	{
+		"en"			"Veteran SMG Combat Badge"
+		"pl"			"Weteran w walce z SMG"
+	}
+	"Name_Badge8_Expert"	// other
+	{
+		"en"			"Expert SMG Combat Badge"
+		"pl"			"Ekspert w walce z SMG"
+	}
+	"Name_Badge8_Profesional"	// other
+	{
+		"en"			"Professional SMG Combat Badge"
+		"pl"			"Profesjonalista w walce z SMG"
+	}
+
+	"Info_Badge1"	// other
+	{
+		"en"			"Knife damage returned as health"
+		"pl"			"Zadane obrażenia z Noża zamieniają się w HP"
+	}
+	"Info_Badge2"	// other
+	{
+		"en"			"Chance of freezing your enemy"
+		"pl"			"Szansa na unieszkodliwienie atakującego na 1 sekunde"
+	}
+	"Info_Badge3"	// other
+	{
+		"en"			"Bonus HP"
+		"pl"			"Bonusowe HP"
+	}
+	"Info_Badge4"	// other
+	{
+		"en"			"Chance of getting a free AWP"
+		"pl"			"Szansa na darmowe AWP"
+	}
+	"Info_Badge5"	// other
+	{
+		"en"			"More M249 damage"
+		"pl"			"Dodatkowe obrażenia z M249"
+	}
+	"Info_Badge6"	// other
+	{
+		"en"			"More Grenade damage + chance of getting a free HE"
+		"pl"			"Większe obrażenia z granatów + szansa na zdobycie darmowego HE"
+	}
+	"Info_Badge7"	// other
+	{
+		"en"			"Invisible with Knife"
+		"pl"			"Niewidzialność z nożem"
+	}
+	"Info_Badge8"	// other
+	{
+		"en"			"% speed for all weapons"
+		"pl"			"% speed dla wszystkich broni"
+	}
+
+	"Req_Badge1_Basic"	// other
+	{
+		"en"			"» 2 Knife Kills in 1 Spawn/Round"
+		"pl"			"» 2 Zabicia Nożem w 1 Rundzie"
+	}
+	"Req_Badge1_Veteran"	// other
+	{
+		"en"			"» 50 Global Knife Kills"
+		"pl"			"» 50 zabójstw z Noża"
+	}
+	"Req_Badge1_Expert"	// other
+	{
+		"en"			"» 100 Global Knife Kills\n» 3 Knife Kills in 1 Spawn/Round"
+		"pl"			"» 100 zabójstw z Noża\n» 3 Zabicia Nożem w 1 Rundzie"
+	}
+	"Req_Badge1_Profesional"	// other
+	{
+		"en"			"» 200 Global Knife Kills\n» 5 Knife Kills in 1 Spawn/Round"
+		"pl"			"» 200 zabójstw z Noża\n» 5 Zabicia Nożem w 1 Rundzie"
+	}
+	"Req_Badge2_Basic"	// other
+	{
+		"en"			"» 3 Pistol Kills in 1 Spawn/Round"
+		"pl"			"» 3 Zabicia Pistoletem w 1 Rundzie"
+	}
+	"Req_Badge2_Veteran"	// other
+	{
+		"en"			"» 100 Global Pistol Kills"
+		"pl"			"» 100 Zabić Pistoletem"
+	}
+	"Req_Badge2_Expert"	// other
+	{
+		"en"			"» 200 Global Pistol Kills\n» 4 Pistol Kills in 1 Spawn/Round\n» 2 Pistol HS Kills in same Spawn/Round"
+		"pl"			"» 200 Zabić Pistoletem\n» 4 Zabicia Pistoletem w 1 Rundzie\n» 2 Zabicia HS z Pistoletu w jednej rundzie"
+	}
+	"Req_Badge2_Profesional"	// other
+	{
+		"en"			"» 400 Global Pistol Kills\n» 6 Pistol Kills in 1 Spawn/Round\n» 3 Pistol HS Kills in same Spawn/Round"
+		"pl"			"» 400 Zabić Pistoletem\n» 6 Zabić Pistoletem w 1 Rundzie\n» 3 Zabicia HS z Pistoletu w jednej rundzie"
+	}
+	"Req_Badge3_Basic"	// other
+	{
+		"en"			"» 4 Global Rifle Kills"
+		"pl"			"» 4 Zabicia w 1 Rundzie"
+	}
+	"Req_Badge3_Veteran"	// other
+	{
+		"en"			"» Accuracy of 25% or higher"
+		"pl"			"» Celność równa lub wyższa od 25%"
+	}
+	"Req_Badge3_Expert"	// other
+	{
+		"en"			"» 2000 Global Rifle Kills\n» 5 Rifle Kills in 1 Spawn/Round\n» 3 Rifle HS Kills in same Spawn/Round"
+		"pl"			"» 2000 Zabić z Karabinów\n» 5 Zabić karabinami w 1 Rundzie\n» 3 Zabicia HS karabinami w 1 Rundzie"
+	}
+	"Req_Badge3_Profesional"	// other
+	{
+		"en"			"» 4000 Global Rifle Kills\n» 6 Rifle Kills in 1 Spawn/Round\n» 5 Rifle HS Kills in same Spawn/Round"
+		"pl"			"» 4000 Zabić z Karabinów\n» 7 Zabić karabinami w 1 Rundzie\n» 5 Zabić HS karabinami w 1 Rundzie"
+	}
+	"Req_Badge4_Basic"	// other
+	{
+		"en"			"» 3 Sniper Kills in 1 Spawn/Round"
+		"pl"			"» 3 Zabicia ze Snajperki w 1 Rundzie"
+	}
+	"Req_Badge4_Veteran"	// other
+	{
+		"en"			"» 100 Global Sniper Kills"
+		"pl"			"» 100 Zabić ze Snajperki"
+	}
+	"Req_Badge4_Expert"	// other
+	{
+		"en"			"» 200 Global Sniper Kills\n» 4 Sniper Kills in 1 Spawn/Round\n» 1 Sniper HS Kill in same Spawn/Round"
+		"pl"			"» 200 Zabić ze Snajperki\n» 4 Zabicia ze Snajperki w 1 Rundzie\n» 1 Zabicie HS ze Snajperki w 1 Rundzie"
+	}
+	"Req_Badge4_Profesional"	// other
+	{
+		"en"			"» 400 Global Sniper Kills\n» 6 Sniper Kills in 1 Spawn/Round\n» 3 Sniper HS Kills in same Spawn/Round"
+		"pl"			"» 400 Zabić ze Snajperki\n» 6 Zabić ze Snajperki w 1 Rundzie\n» 3 Zabicia HS ze Snajperki w 1 Rundzie"
+	}
+	"Req_Badge5_Basic"	// other
+	{
+		"en"			"» 2 M249 Kills in 1 Spawn/Round"
+		"pl"			"» 2 Zabicia z M249 w 1 Rundzie"
+	}
+	"Req_Badge5_Veteran"	// other
+	{
+		"en"			"» 100 Global M249 Kills"
+		"pl"			"» 100 Zabić z M249"
+	}
+	"Req_Badge5_Expert"	// other
+	{
+		"en"			"» 200 Global M249 Kills\n» 4 M249 Kills in 1 Spawn/Round\n» 1 M249 HS Kill in same Spawn/Round"
+		"pl"			"» 200 Zabić z M249\n» 4 Zabicia z M249 w 1 Rundzie\n» 1 Zabicie HS z M249 w 1 Rundzie"
+	}
+	"Req_Badge5_Profesional"	// other
+	{
+		"en"			"» 400 Global M249 Kills\n» 6 M249 Kills in 1 Spawn/Round\n» 3 M249 HS Kills in same Spawn/Round"
+		"pl"			"» 400 Zabić z M249\n» 6 Zabić z M249 w 1 Rundzie\n» 3 Zabicia HS z M249 w 1 Rundzie"
+	}
+	"Req_Badge6_Basic"	// other
+	{
+		"en"			"» 30 Global HE Kills"
+		"pl"			"» 30 Zabić Granatem"
+	}
+	"Req_Badge6_Veteran"	// other
+	{
+		"en"			"» 100 Global HE Kills"
+		"pl"			"» 100 Zabić Granatem"
+	}
+	"Req_Badge6_Expert"	// other
+	{
+		"en"			"» 200 Global HE Kills"
+		"pl"			"» 200 Zabić Granatem"
+	}
+	"Req_Badge6_Profesional"	// other
+	{
+		"en"			"» 500 Global HE Kills"
+		"pl"			"» 500 Zabić Granatem"
+	}
+	"Req_Badge7_Basic"	// other
+	{
+		"en"			"» 3 Shotgun Kills in 1 Spawn/Round"
+		"pl"			"» 3 Zabicia Shotgunem w jednej rundzie"
+	}
+	"Req_Badge7_Veteran"	// other
+	{
+		"en"			"» 100 Global Shotgun Kills"
+		"pl"			"» 100 Zabić Shotgunem"
+	}
+	"Req_Badge7_Expert"	// other
+	{
+		"en"			"» 200 Global Shotgun Kills\n» 4 Shotgun Kills in 1 Spawn/Round\n» 1 Shotgun HS Kill in same Spawn/Round"
+		"pl"			"» 200 Zabić Shotgunem\n» 4 Zabicia Shotgunem w jednej rundzie\n» 1 Zabicie HS z Shotguna w jednej rundzie"
+	}
+	"Req_Badge7_Profesional"	// other
+	{
+		"en"			"» 500 Global Shotgun Kills\n» 6 Shotgun Kills in 1 Spawn/Round\n» 3 Shotgun HS Kills in same Spawn/Round"
+		"pl"			"» 500 Zabić Shotgunem\n» 6 Zabić Shotgunem w jednej rundzie\n» 3 Zabicia HS z Shotguna w jednej rundzie"
+	}
+	"Req_Badge8_Basic"	// other
+	{
+		"en"			"» 3 SMG Kills in 1 Spawn/Round"
+		"pl"			"» 3 Zabica z SMG w jednej rundzie"
+	}
+	"Req_Badge8_Veteran"	// other
+	{
+		"en"			"» 100 Global SMG Kills"
+		"pl"			"» 100 Zabić z SMG"
+	}
+	"Req_Badge8_Expert"	// other
+	{
+		"en"			"» 200 Global SMG Kills\n» 4 SMG Kills in 1 Spawn/Round\n» 1 SMG HS Kill in same Spawn/Round"
+		"pl"			"» 200 Zabić z SMG\n» 4 Zabicia z SMG w jednej rundzie\n» 1 Zabicie HS z SMG w jednej rundzie"
+	}
+	"Req_Badge8_Profesional"	// other
+	{
+		"en"			"» 450 Global SMG Kills\n» 6 SMG Kills in 1 Spawn/Round\n» 3 SMG HS Kills in same Spawn/Round"
+		"pl"			"» 450 Zabić z SMG\n» 6 Zabić z SMG w jednej rundzie\n» 3 Zabicia HS z SMG w jednej rundzie"
+	}
+
+
+	"Award_Badge1_Basic"	// other
+	{
+		"en"			"20% Knife damage returned as health"
+		"pl"			"20% obrażeń zadanych z nożem zamienia się w HP"
+	}
+	"Award_Badge1_Veteran"	// other
+	{
+		"en"			"40% Knife damage returned as health"
+		"pl"			"40% obrażeń zadanych z nożem zamienia się w HP"
+	}
+	"Award_Badge1_Expert"	// other
+	{
+		"en"			"60% Knife damage returned as health"
+		"pl"			"60% obrażeń zadanych z nożem zamienia się w HP"
+	}
+	"Award_Badge1_Profesional"	// other
+	{
+		"en"			"80% Knife damage returned as health"
+		"pl"			"80% obrażeń zadanych z nożem zamienia się w HP"
+	}
+	"Award_Badge2_Basic"	// other
+	{
+		"en"			"20% chance of freezing your enemy"
+		"pl"			"20% szansy na zamrożenia wroga"
+	}
+	"Award_Badge2_Veteran"	// other
+	{
+		"en"			"25% chance of freezing your enemy"
+		"pl"			"25% szansy na zamrożenia wroga"
+	}
+	"Award_Badge2_Expert"	// other
+	{
+		"en"			"33% chance of freezing your enemy"
+		"pl"			"33% szansy na zamrożenia wroga"
+	}
+	"Award_Badge2_Profesional"	// other
+	{
+		"en"			"50% chance of freezing your enemy"
+		"pl"			"50% szansy na zamrożenia wroga"
+	}
+	"Award_Badge3_Basic"	// other
+	{
+		"en"			"10 bonus HP"
+		"pl"			"10 bonusowego HP"
+	}
+	"Award_Badge3_Veteran"	// other
+	{
+		"en"			"20 bonus HP"
+		"pl"			"20 bonusowego HP"
+	}
+	"Award_Badge3_Expert"	// other
+	{
+		"en"			"30 bonus HP"
+		"pl"			"30 bonusowego HP"
+	}
+	"Award_Badge3_Profesional"	// other
+	{
+		"en"			"40 bonus HP"
+		"pl"			"40 bonusowego HP"
+	}
+	"Award_Badge4_Basic"	// other
+	{
+		"en"			"1/4 chance of getting a free AWP"
+		"pl"			"1/4 szansy na darmowe AWP"
+	}
+	"Award_Badge4_Veteran"	// other
+	{
+		"en"			"1/3 chance of getting a free AWP"
+		"pl"			"1/3 szansy na darmowe AWP"
+	}
+	"Award_Badge4_Expert"	// other
+	{
+		"en"			"1/2 chance of getting a free AWP"
+		"pl"			"1/2 szansy na darmowe AWP"
+	}
+	"Award_Badge4_Profesional"	// other
+	{
+		"en"			"Free AWP every spawn"
+		"pl"			"Darmowe AWP co rundę"
+	}
+	"Award_Badge5_Basic"	// other
+	{
+		"en"			"+2 damage per M249 bullet"
+		"pl"			"+2 Obrażeń z M249"
+	}
+	"Award_Badge5_Veteran"	// other
+	{
+		"en"			"+4 damage per M249 bullet"
+		"pl"			"+4 Obrażeń z M249"
+	}
+	"Award_Badge5_Expert"	// other
+	{
+		"en"			"+6 damage per M249 bullet"
+		"pl"			"+6 Obrażeń z M249"
+	}
+	"Award_Badge5_Profesional"	// other
+	{
+		"en"			"+8 damage per M249 bullet"
+		"pl"			"+8 Obrażeń z M249"
+	}
+	"Award_Badge6_Basic"	// other
+	{
+		"en"			"20% more Grenade damage + 1/4 chance of getting a free HE"
+		"pl"			"20% więcej obrażeń + 1/4 na darmowe HE"
+	}
+	"Award_Badge6_Veteran"	// other
+	{
+		"en"			"40% more Grenade damage + 1/3 chance of getting a free HE"
+		"pl"			"40% więcej obrażeń + 1/3 na darmowe HE"
+	}
+	"Award_Badge6_Expert"	// other
+	{
+		"en"			"60% more Grenade damage + 1/2 chance of getting a free HE"
+		"pl"			"60% więcej obrażeń + 1/2 na darmowe HE"
+	}
+	"Award_Badge6_Profesional"	// other
+	{
+		"en"			"80% more Grenade damage + Free HE every spawn"
+		"pl"			"80% więcej obrażeń + Darmowe HE co rundę"
+	}
+	"Award_Badge7_Basic"	// other
+	{
+		"en"			"Invisible with Knife (200/255)"
+		"pl"			"Mniejsza widocznosć z nożem"
+	}
+	"Award_Badge7_Veteran"	// other
+	{
+		"en"			"Invisible with Knife (180/255)"
+		"pl"			"Mniejsza widocznosć z nożem"
+	}
+	"Award_Badge7_Expert"	// other
+	{
+		"en"			"Invisible with Knife (160/255)"
+		"pl"			"Mniejsza widocznosć z nożem"
+	}
+	"Award_Badge7_Profesional"	// other
+	{
+		"en"			"Invisible with Knife (150/255)"
+		"pl"			"Mniejsza widocznosć z nożem"
+	}
+	"Award_Badge8_Basic"	// other
+	{
+		"en"			"10% more speed for all weapons"
+		"pl"			"10% szybszy bieg na wszytkich broniach"
+	}
+	"Award_Badge8_Veteran"	// other
+	{
+		"en"			"20% more speed for all weapons"
+		"pl"			"20% szybszy bieg na wszytkich broniach"
+	}
+	"Award_Badge8_Expert"	// other
+	{
+		"en"			"30% more speed for all weapons"
+		"pl"			"30% szybszy bieg na wszytkich broniach"
+	}
+	"Award_Badge8_Profesional"	// other
+	{
+		"en"			"40% more speed for all weapons"
+		"pl"			"40% szybszy bieg na wszytkich broniach"
+	}
+}
