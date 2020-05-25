@@ -59,7 +59,7 @@
 	{
 		"#format"		"{1:s},{2:d}"
 		"en"			"Rank: {1}\nFrags: {2}"
-		"pl"			"Ranga: {1}\nFragi: {2}"
+		"pl"			"Ranga: {1}\nZabójstw: {2}"
 	}
 	"MenuClientRanksTitle2"	// menu
 	{
@@ -70,8 +70,8 @@
 	"MenuClientRanksTitle3"	// menu
 	{
 		"#format"		"{1:s},{2:d}"
-		"en"			"{1}\nRequirements {2} frags"
-		"pl"			"{1}\nWymagane {2} zabójstwa"
+		"en"			"{1}\nRequirements {2} points"
+		"pl"			"{1}\nWymagane {2} punktów"
 	}
 	"MenuClientRanksList"	// menu
 	{
@@ -87,8 +87,8 @@
 	"MenuListRanksDesc"	// menu
 	{
 		"#format"		"{1:s},{2:d}"
-		"en"			"{1} ({2} frags)"
-		"pl"			"{1} ({2} zabójstw)"
+		"en"			"{1} ({2} points)"
+		"pl"			"{1} ({2} punktów)"
 	}
 
 	"MenuClientStatsTitle"	// menu
@@ -300,12 +300,17 @@
 		"en"			"Choose player:"
 		"pl"			"Wybierz gracza:"
 	}
+	"MenuPlayerListNoPlayers"	// menu
+	{
+		"en"			"No players"
+		"pl"			"Brak graczy"
+	}
 
 	"MenuClientBadgesTitle"	// menu
 	{
 		"#format"		"{1:N},{2:s},{3:d}"
-		"en"			"[BF2] {1}\nRank: {2}\nKills: {3}"
-		"pl"			"[BF2] {1}\nRanga: {2}\nZabójstw: {3}"
+		"en"			"[BF2] {1}\nRank: {2}\nFrags: {3}"
+		"pl"			"[BF2] {1}\nRanga: {2}\nZabójstwa: {3}"
 	}
 	"MenuClientBadgesNoBadges"	// menu
 	{
