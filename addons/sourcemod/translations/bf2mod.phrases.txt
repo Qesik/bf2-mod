@@ -52,6 +52,23 @@
 		"en"			"@green{1} @default- Bronze Medal - @green{2} @defaultkills"
 		"pl"			"@green{1} @default- Brązowy Medal- @green{2} @defaultZabójstw"
 	}
+	"tb reset database"	// chat
+	{
+		"en"			"All data has been removed from the database!"
+		"pl"			"Usunąłeś wszystkie dane z bazy!"
+	}
+	"tb admin add badge"	// chat
+	{
+		"#format"		"{1:N},{2:t}"
+		"en"			"{1} badge has been awarded to {2}!"
+		"pl"			"Awansowałeś gracza {1} do odznaki {2}!"
+	}
+	"tb admin set kills"	// chat
+	{
+		"#format"		"{1:N},{2:d}"
+		"en"			"{1} kills have been set to {2}!"
+		"pl"			"Ustawiłeś graczowi {1} {2} zabójstw!"
+	}
 
 
 
@@ -70,8 +87,8 @@
 	"MenuClientRanksTitle3"	// menu
 	{
 		"#format"		"{1:s},{2:d}"
-		"en"			"{1}\nRequirements {2} points"
-		"pl"			"{1}\nWymagane {2} punktów"
+		"en"			"{1}\nRequirements {2} fragów"
+		"pl"			"{1}\nWymagane {2} zabójstw"
 	}
 	"MenuClientRanksList"	// menu
 	{
@@ -87,8 +104,8 @@
 	"MenuListRanksDesc"	// menu
 	{
 		"#format"		"{1:s},{2:d}"
-		"en"			"{1} ({2} points)"
-		"pl"			"{1} ({2} punktów)"
+		"en"			"{1} ({2} frags)"
+		"pl"			"{1} ({2} zabójstw)"
 	}
 
 	"MenuClientStatsTitle"	// menu
@@ -316,6 +333,42 @@
 	{
 		"en"			"No Badges"
 		"pl"			"Brak odznak"
+	}
+	
+	"MenuAdminBF2Title"	// menu
+	{
+		"en"			"BF2: Admin Panel"
+		"pl"			"BF2: Panel admina"
+	}
+	"MenuAdminBF2SetBadge"	// menu
+	{
+		"en"			"Award a Badge to a Player"
+		"pl"			"Dodaj graczowi odznakę"
+	}
+	"MenuAdminBF2Title"	// menu
+	{
+		"en"			"Award Kills to a Player"
+		"pl"			"Dodaj graczowi fragi"
+	}
+	"MenuAdminBF2Reset"	// menu
+	{
+		"en"			"Reset Server Stats"
+		"pl"			"Zresetuj dane graczy"
+	}
+	"MenuAdminBF2Reset_TITLE"	// menu
+	{
+		"en"			"Are you sure?"
+		"pl"			"Jesteś pewien?"
+	}
+	"MenuAdminBF2Reset_YES"	// menu
+	{
+		"en"			"Yes"
+		"pl"			"Tak"
+	}
+	"MenuAdminBF2Reset_NO"	// menu
+	{
+		"en"			"No"
+		"pl"			"Nie"
 	}
 
 	
