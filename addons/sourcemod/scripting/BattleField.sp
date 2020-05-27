@@ -92,6 +92,11 @@ enum struct ServerData
 	Database DBK;
 	int TopFrags[3];
 
+	ConVar cVarMinPlayers;
+	ConVar cVarXpMultiplier;
+	ConVar cVarScreenTime;
+	ConVar cVarOvLanguage;
+
 	void ResetVars(/*void*/)
 	{
 		this.TopFrags[0] = 0;
@@ -100,10 +105,6 @@ enum struct ServerData
 	}
 }
 ServerData gServerData;
-
-ConVar gCvar_MinPlayers;
-ConVar gCvar_XpMultiplier;
-ConVar gCvar_ScreenTime;
 
 /*
 	* * * * * * * * * * * * * * * * * * * * * * * * 
@@ -517,7 +518,7 @@ public Action ev_PlayerSpawn(Event hEvent, const char[] eName, bool dontBroadcas
 // =============================================================//
 public Action ev_PlayerDeath(Event hEvent, const char[] eName, bool dontBroadcast)
 {
-	if ( GetClientCount(true) < gCvar_MinPlayers.IntValue )
+	if ( GetClientCount(true) < gServerData.cVarMinPlayers.IntValue || GameRules_GetProp("m_bWarmupPeriod") == 1 )
 		return Plugin_Continue;
 
 	int killer = GetClientOfUserId(hEvent.GetInt("attacker"));
@@ -525,9 +526,6 @@ public Action ev_PlayerDeath(Event hEvent, const char[] eName, bool dontBroadcas
 	bool headshot = hEvent.GetBool("headshot");
 
 	if ( !IsValidClient(killer) || !IsValidClient(victim) || GetClientTeam(victim) == GetClientTeam(killer) || !gClientInfo[killer].LoadData )
-		return Plugin_Continue;
-
-	if ( GameRules_GetProp("m_bWarmupPeriod") == 1 )
 		return Plugin_Continue;
 
 	gClientInfo[killer].sFrags ++;
@@ -599,7 +597,7 @@ public Action ev_PlayerDeath(Event hEvent, const char[] eName, bool dontBroadcas
 		}
 	}
 
-	Check_Badges(killer);
+	RequestFrame(Check_Badges, killer);
 
 	return Plugin_Continue;
 }
@@ -773,9 +771,10 @@ public void sdk_WeaponSwitch(int client, int weaponEnt)
 */
 void OnCvar(/*void*/)
 {
-	gCvar_MinPlayers = CreateConVar("bf2_min_players", "2", "Minimum players");
-	gCvar_XpMultiplier = CreateConVar("bf2_xp_multiplier", "0.1", "Point multiplier needed to reach each level (float)");
-	gCvar_ScreenTime = CreateConVar("bf2_icon_time", "2.0", "Amount of time to display the rank icons (float)");
+	gServerData.cVarOvLanguage = CreateConVar("bf2_overlays_language", "en", "Set overlays language: 'en' or 'pl'");
+	gServerData.cVarMinPlayers = CreateConVar("bf2_min_players", "2", "Minimum players");
+	gServerData.cVarXpMultiplier = CreateConVar("bf2_xp_multiplier", "0.1", "Point multiplier needed to reach each level (float)");
+	gServerData.cVarScreenTime = CreateConVar("bf2_icon_time", "2.0", "Amount of time to display the rank icons (float)");
 
 	AutoExecConfig(true, "BF2_Mod");
 }
@@ -798,12 +797,15 @@ void OnCvar(/*void*/)
 */
 void OnRegCommand(/*void*/)
 {
-	RegConsoleCmd("sm_rank",		cmd_Ranks,		"[BF2] Pokazuje Informacje o Rankingu");
-	RegConsoleCmd("sm_bf2stats",	cmd_Bf2Stats,	"[BF2] Pokazuje Statystyki Danej Broni");
+	RegConsoleCmd("sm_rank",		cmd_Ranks,			"[BF2] Pokazuje Informacje o Rankingu");
+	RegConsoleCmd("sm_bf2stats",	cmd_Bf2Stats,		"[BF2] Pokazuje Statystyki Danej Broni");
 
-	RegConsoleCmd("sm_bf2menu",		cmd_BF2Menu,	"[BF2] Menu serwera");
-	RegConsoleCmd("sm_bf2",			cmd_BF2Menu,	"[BF2] Menu serwera");
-	RegConsoleCmd("sm_menu",		cmd_BF2Menu,	"[BF2] Menu serwera");
+	RegConsoleCmd("sm_bf2menu",		cmd_BF2Menu,		"[BF2] Menu serwera");
+	RegConsoleCmd("sm_bf2",			cmd_BF2Menu,		"[BF2] Menu serwera");
+	RegConsoleCmd("sm_menu",		cmd_BF2Menu,		"[BF2] Menu serwera");
+
+	RegAdminCmd("sm_addbadge",		cmd_AdminAddBadge,	ADMFLAG_CONFIG);
+	RegAdminCmd("sm_addkills",		cmd_AdminAddKills,	ADMFLAG_CONFIG);
 }
 
 public Action cmd_Ranks(int client, int args)
@@ -834,6 +836,98 @@ public Action cmd_BF2Menu(int client, int args)
 	MenuBF2(client);
 
 	return Plugin_Continue;
+}
+
+
+public Action cmd_AdminAddBadge(int client, int args)
+{
+	if ( args != 3 ) {
+		PrintToConsole(client, "Usage: sm_addbadge <#id> <badge 0-7> <level 0-4>");
+		return Plugin_Handled;
+	}
+
+	char szID[16], sBadge[4], sLevel[4];
+
+	GetCmdArg(1, szID, sizeof(szID));
+	GetCmdArg(2, sBadge, sizeof(sBadge));
+	GetCmdArg(3, sLevel, sizeof(sLevel));
+
+	StripQuotes(szID);
+	StripQuotes(sBadge);
+	StripQuotes(sLevel);
+
+	int cBadge = StringToInt(sBadge);
+	int cLevel = StringToInt(sLevel);
+
+	if ( cBadge < 0 || cBadge > MAX_BADGES || cLevel < 0 || cLevel > LEVEL_PROFESIONAL )
+		return Plugin_Handled;
+
+	int id2 = FindTarget(client, szID, false, false);
+	if ( id2 <= 0 )
+		return Plugin_Handled;
+
+	gClientInfo[id2].mBadges[cBadge] = cLevel;
+
+	if ( client )
+		BF2_PrintToChat(client, "tb admin add badge", id2, gBadgeName[cBadge][cLevel]);
+	else
+		PrintToServer("%N badge has been awarded to %t", id2, gBadgeName[cBadge][cLevel]);
+
+	char sLang[4];
+	gServerData.cVarOvLanguage.GetString(sLang, sizeof(sLang));
+	if ( StrEqual(sLang, "pl") )
+		LogMessage("[BF2-ADMIN] Admin %d awansował odznakę %t graczowi %d", 
+		client ? GetSteamAccountID(client) : 0, gBadgeName[cBadge][cLevel], GetSteamAccountID(id2));
+	else
+		LogMessage("[BF2-ADMIN] Admin %d awarded badge %t to player %d", 
+		client ? GetSteamAccountID(client) : 0, gBadgeName[cBadge][cLevel], GetSteamAccountID(id2));
+
+	return Plugin_Handled;
+}
+
+public Action cmd_AdminAddKills(int client, int args)
+{
+	if ( args != 2 ) {
+		PrintToConsole(client, "Usage: sm_addkills <#id> <kills>");
+		return Plugin_Handled;
+	}
+
+	char szID[16], sKills[4];
+
+	GetCmdArg(1, szID, sizeof(szID));
+	GetCmdArg(2, sKills, sizeof(sKills));
+
+	StripQuotes(szID);
+	StripQuotes(sKills);
+
+	int cKills = StringToInt(sKills);
+
+	if ( cKills < 0 )
+		return Plugin_Handled;
+
+	int id2 = FindTarget(client, szID, false, false);
+	if ( id2 <= 0 )
+		return Plugin_Handled;
+
+	gClientInfo[id2].Stats[KILL_ALL] = cKills;
+
+	if ( client )
+		BF2_PrintToChat(client, "tb admin set kills", id2, cKills);
+	else
+		PrintToServer("%N kills have been set to %d", id2, cKills);
+
+	char sLang[4];
+	gServerData.cVarOvLanguage.GetString(sLang, sizeof(sLang));
+	if ( StrEqual(sLang, "pl") )
+		LogMessage("[BF2-ADMIN] Admin %d ustawił graczowi %s (%d) %d fragów", 
+		client ? GetSteamAccountID(client) : 0, id2, GetSteamAccountID(id2), cKills);
+	else
+		LogMessage("[BF2-ADMIN] Admin %d set %d kills to player %s (%d", 
+		client ? GetSteamAccountID(client) : 0, cKills, id2, GetSteamAccountID(id2));
+
+	BF_CheckRank(id2, false);
+
+	return Plugin_Handled;
 }
 
 /*
@@ -870,7 +964,7 @@ public void MenuClientRanks(int client)
 	Format(fMenu, sizeof(fMenu), "%t", "MenuClientRanksTitle", gRankName[gClientInfo[client].Rank], gClientInfo[client].Stats[KILL_ALL]);
 	if ( gClientInfo[client].Rank < 17 ) {
 		Format(fMenu, sizeof(fMenu), "%t", "MenuClientRanksTitle2", fMenu, gRankName[gClientInfo[client].Rank + 1]);
-		Format(fMenu, sizeof(fMenu), "%t", "MenuClientRanksTitle3", fMenu, RoundFloat(gRankXP[gClientInfo[client].Rank + 1] * gCvar_XpMultiplier.FloatValue));
+		Format(fMenu, sizeof(fMenu), "%t", "MenuClientRanksTitle3", fMenu, RoundFloat(gRankXP[gClientInfo[client].Rank + 1] * gServerData.cVarXpMultiplier.FloatValue));
 	}
 
 	mMenu.SetTitle(fMenu);
@@ -910,7 +1004,7 @@ public void MenuListRanks(int client)
 
 	for(int i = 1; i < MAX_RANKS; i++)
 	{
-		FormatEx(fMenu, sizeof(fMenu), "%t", "MenuListRanksDesc", gRankName[i], RoundFloat(gRankXP[i] * gCvar_XpMultiplier.FloatValue));
+		FormatEx(fMenu, sizeof(fMenu), "%t", "MenuListRanksDesc", gRankName[i], RoundFloat(gRankXP[i] * gServerData.cVarXpMultiplier.FloatValue));
 		mMenu.AddItem("", fMenu, ITEMDRAW_DISABLED);
 	}
 
@@ -1024,8 +1118,8 @@ public void MenuBF2(int client)
 	mMenu.AddItem("", fMenu);
 	FormatEx(fMenu, sizeof(fMenu), "%t", "MenuBF2Stats");
 	mMenu.AddItem("", fMenu);
-	//FormatEx(fMenu, sizeof(fMenu), "%t", "MenuBF2PanelAdmin");
-	//mMenu.AddItem("", fMenu, HasFlag(client, Admin_Config) ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
+	FormatEx(fMenu, sizeof(fMenu), "%t", "MenuBF2PanelAdmin");
+	mMenu.AddItem("", fMenu, CheckCommandAccess(client, "bf2_admin_panel", ADMFLAG_CONFIG) ? ITEMDRAW_DEFAULT : ITEMDRAW_DISABLED);
 
 	mMenu.Display(client, 30);
 }
@@ -1039,7 +1133,7 @@ public int MenuBF2_H(Menu mMenu, MenuAction mAction, int client, int param)
 		{
 			case 0 :	MenuHelpBF2(client);
 			case 1 :	MenuStatsBF2(client);
-			//case 2 :	MenuAdminBF2(client);
+			case 2 :	MenuAdminBF2(client);
 		}
 	}
 
@@ -1146,7 +1240,7 @@ public int MenuHelp_Badges_H(Menu mMenu, MenuAction mAction, int client, int par
 }
 // =============================================================//
 // 							MenuBadgesInfo						//
-//						Menu z opisem odznak					//
+//																//
 // =============================================================//
 public void MenuBadgesInfo(int client, int item)
 {
@@ -1178,7 +1272,7 @@ public int MenuBadgesInfo_H(Menu mMenu, MenuAction mAction, int client, int para
 
 // =============================================================//
 // 							MenuStatsBF2						//
-//					Menu ze statystykami BF2					//
+//																//
 // =============================================================//
 public void MenuStatsBF2(int client)
 {
@@ -1376,6 +1470,102 @@ public int MenuClientBadges_H(Menu mMenu, MenuAction mAction, int client, int pa
 
 	return 0;
 }
+
+
+// =============================================================//
+// 							MenuAdminBF2						//
+//																//
+// =============================================================//
+public void MenuAdminBF2(int client)
+{
+	char fMenu[64];
+
+	SetGlobalTransTarget(client);
+
+	Menu mMenu = new Menu(MenuAdminBF2_H);
+	
+	FormatEx(fMenu, sizeof(fMenu), "%t", "MenuAdminBF2Title");
+	mMenu.SetTitle(fMenu);
+
+	FormatEx(fMenu, sizeof(fMenu), "%t", "MenuAdminBF2Reset");
+	mMenu.AddItem("33", fMenu);
+
+	mMenu.ExitBackButton = true;
+	mMenu.Display(client, 30);
+}
+public int MenuAdminBF2_H(Menu mMenu, MenuAction mAction, int client, int param)
+{
+	switch(mAction)
+	{
+		case MenuAction_End :	delete mMenu;
+
+		case MenuAction_Cancel : 
+		{
+			if ( param == MenuCancel_ExitBack )
+				MenuBF2(client);
+		}
+		case MenuAction_Select :
+		{
+			if ( !CheckCommandAccess(client, "bf2_admin_panel", ADMFLAG_CONFIG) )
+				return 0;
+
+			char info[4];
+			mMenu.GetItem(param, info, sizeof(info));
+			int item = StringToInt(info);
+
+			if ( item == 33 )
+				MenuAdminBF2_ConfirmReset(client);
+		}
+	}
+	return 0;
+}
+// =============================================================//
+// 					MenuAdminBF2_ConfirmReset					//
+// =============================================================//
+public void MenuAdminBF2_ConfirmReset(int client)
+{
+	char fMenu[64];
+
+	SetGlobalTransTarget(client);
+
+	Menu mMenu = new Menu(MenuAdminBF2_ConfirmResetH);
+	mMenu.SetTitle("%t", "MenuAdminBF2Reset_TITLE");
+
+	FormatEx(fMenu, sizeof(fMenu), "%t", "MenuAdminBF2Reset_NO");
+	mMenu.AddItem("", fMenu);
+	FormatEx(fMenu, sizeof(fMenu), "%t", "MenuAdminBF2Reset_NO");
+	mMenu.AddItem("", fMenu);
+	FormatEx(fMenu, sizeof(fMenu), "%t", "MenuAdminBF2Reset_YES");
+	mMenu.AddItem("33", fMenu);
+	FormatEx(fMenu, sizeof(fMenu), "%t", "MenuAdminBF2Reset_NO");
+	mMenu.AddItem("", fMenu);
+
+	mMenu.Display(client, 30);
+}
+public int MenuAdminBF2_ConfirmResetH(Menu mMenu, MenuAction mAction, int client, int param)
+{
+	if ( mAction == MenuAction_End )
+		delete mMenu;
+	else if ( mAction == MenuAction_Select ) {
+		char info[4];
+		mMenu.GetItem(param, info, sizeof(info));
+		int item = StringToInt(info);
+
+		if ( item == 33 )
+		{
+			BF2_PrintToChat(client, "tb reset database");
+
+			char fQuery[1024];
+			FormatEx(fQuery, sizeof(fQuery), "TRUNCATE TABLE `bf2_players`;");
+			if ( !SQL_FastQuery(gServerData.DBK, fQuery, sizeof(fQuery)) ) {
+				char Error[256];
+				SQL_GetError(gServerData.DBK, Error, sizeof(Error));
+				LogToFile(FILELOG_ERROR, "[ERROR SQL] MenuAdminBF2_ConfirmResetH: %s", Error);
+			}
+		}
+	}
+	return 0;
+}
 /*
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -1397,7 +1587,10 @@ public void BF_CheckRank(int client, bool load_data)
 {
 	bool level_up = false;
 
-	while(gClientInfo[client].Rank < MAX_RANKS && gClientInfo[client].Stats[KILL_ALL] >= RoundFloat(gRankXP[gClientInfo[client].Rank + 1] * gCvar_XpMultiplier.FloatValue) )
+	while(
+		gClientInfo[client].Rank < MAX_RANKS && 
+		gClientInfo[client].Stats[KILL_ALL] >= RoundFloat(gRankXP[gClientInfo[client].Rank + 1] * gServerData.cVarXpMultiplier.FloatValue) 
+	)
 	{
 		gClientInfo[client].Rank ++;
 		level_up = true;
@@ -1883,15 +2076,6 @@ bool IsValidClient(int client)
 	return true;
 }
 /*					*/
-/*bool HasFlag(int client, AdminFlag flag)
-{
-	AdminId admin = GetUserAdmin(client);
-	if ( (admin != INVALID_ADMIN_ID) && (GetAdminFlag(admin, flag, Access_Effective) == true) )
-		return true;
-
-	return false;
-}*/
-/*					*/
 void BF2_FormatColor(char[] sText, const int iMaxlen)
 {
 	Format(sText, iMaxlen, " @darkblue%s @default%s", "● [BF2]", sText);
@@ -1943,23 +2127,28 @@ void BF2_TranslationPrintToChatAll(any ...)
     }
 }
 /*					*/
-void BF2_CreateOverlay(int client, char[] overlay_name)
+void BF2_CreateOverlay(int client, char[] ovName)
 {
+	char sLang[4];
+	gServerData.cVarOvLanguage.GetString(sLang, sizeof(sLang));
+	
 	SetCommandFlags("r_screenoverlay", GetCommandFlags("r_screenoverlay") &~ FCVAR_CHEAT);
-	ClientCommand(client, "r_screenoverlay \"bf2mod_csc/en/%s\"", overlay_name);
+	ClientCommand(client, "r_screenoverlay \"bf2mod_csc/%s/%s\"", sLang, ovName);
 	SetCommandFlags("r_screenoverlay", GetCommandFlags("r_screenoverlay") | FCVAR_CHEAT);
 
-	CreateTimer(gCvar_ScreenTime.FloatValue, Timer_RemoveOverlay, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
+	CreateTimer(gServerData.cVarScreenTime.FloatValue, Timer_RemoveOverlay, GetClientUserId(client), TIMER_FLAG_NO_MAPCHANGE);
 }
 /*					*/
 void BF2_Download(char[] sName)
 {
-	char fMat[64];
-	Format(fMat, sizeof(fMat), "materials/bf2mod_csc/en/%s.vtf", sName);
+	char fMat[64], sLang[4];
+	gServerData.cVarOvLanguage.GetString(sLang, sizeof(sLang));
+
+	Format(fMat, sizeof(fMat), "materials/bf2mod_csc/%s/%s.vtf", sLang, sName);
 	PrecacheGeneric(fMat, true);
 	AddFileToDownloadsTable(fMat);
 
-	Format(fMat, sizeof(fMat), "materials/bf2mod_csc/en/%s.vmt", sName);
+	Format(fMat, sizeof(fMat), "materials/bf2mod_csc/%s/%s.vmt", sLang, sName);
 	PrecacheGeneric(fMat, true);
 	AddFileToDownloadsTable(fMat);
 }
