@@ -46,7 +46,7 @@ public Plugin myinfo =
 	name = "BattleField 2",
 	author = "-_- (Karol Skupień)",
 	description = "BattleField 2",
-	version = "1.0",
+	version = "1.15",
 	url = "https://github.com/Qesik/bf2-mod"
 };
 
@@ -114,18 +114,18 @@ ServerData gServerData;
 	* * * * * * * * * * * * * * * * * * * * * * * *
 	* * * * * * * * * * * * * * * * * * * * * * * *
 */
-/*char gRankName[ MAX_RANKS ][ ] = {
+char gRankName[ MAX_RANKS ][ ] = {
 	"Szeregowy", "Starszy Szeregowy", "Kapral", "Starszy Kapral", "Plutonowy",
 	"Sierżant", "Starszy Sierżant", "Młodyszy Chorąży", "Chorąży", "Starszy Chorąży",
 	"Podporucznik", "Porucznik", "Kapitan", "Major",
 	"Podpułkownik", "Pułkownik", "Generał Brygady"
-};*/
-char gRankName[ MAX_RANKS ][ ] = {
+};
+/*char gRankName[ MAX_RANKS ][ ] = {
 	"Private", "Private First Class", "Lance Corporal", "Corporal", "Sergeant",
 	"Staff Sergeant", "Gunnery Sergeant", "Master Sergeant", "Master Gunnery Sergeant", "2nd Lieutenant",
 	"1st Lieutenant", "Captain", "Major", "Lieutenant Colonel",
 	"Colonel", "Brigadier General", "Lieutenant General"
-};
+};*/
 
 int gRankXP[ MAX_RANKS ] = {
 	0, 150, 500, 800, 2500,
@@ -180,8 +180,8 @@ char gBadgeInfoAwards[ MAX_BADGES ][ 5 ][ ] = {
 };
 
 
-int gKnifeDmgHP[ 5 ] = {
-	0, 20, 40, 60, 80
+float gKnifeDmgHP[ 5 ] = {
+	0.0, 0.2, 0.4, 0.6, 0.8
 };
 int gChanceFreezeValue[ 5 ] = {
 	0, 20, 25, 33, 55
@@ -804,6 +804,8 @@ void OnRegCommand(/*void*/)
 	RegConsoleCmd("sm_bf2",			cmd_BF2Menu,		"[BF2] Menu serwera");
 	RegConsoleCmd("sm_menu",		cmd_BF2Menu,		"[BF2] Menu serwera");
 
+	RegConsoleCmd("sm_bf2top",		cmd_BF2TOP,			"[BF2] TOP15");
+
 	RegAdminCmd("sm_addbadge",		cmd_AdminAddBadge,	ADMFLAG_CONFIG);
 	RegAdminCmd("sm_addkills",		cmd_AdminAddKills,	ADMFLAG_CONFIG);
 }
@@ -834,6 +836,16 @@ public Action cmd_BF2Menu(int client, int args)
 		return Plugin_Continue;
 
 	MenuBF2(client);
+
+	return Plugin_Continue;
+}
+
+public Action cmd_BF2TOP(int client, int args)
+{
+	if ( !IsValidClient(client) )
+		return Plugin_Continue;
+
+	MenuTOP15(client);
 
 	return Plugin_Continue;
 }
@@ -1315,12 +1327,7 @@ public int MenuStatsBF2_H(Menu mMenu, MenuAction mAction, int client, int param)
 				case 0 :	MenuPlayersList(client);
 				case 1 :	MenuClientBadges(client, client);
 				case 2 :	MenuClientRanks(client);
-				case 3 :
-				{
-					char fQuery[128];
-					FormatEx(fQuery, sizeof(fQuery), "SELECT `player_name`, `kills` FROM `bf2_players` ORDER BY `kills` DESC LIMIT 15;");
-					gServerData.DBK.Query(MenuTOP15, fQuery, GetClientUserId(client));
-				}
+				case 3 :	MenuTOP15(client);
 			}
 		}
 	}
@@ -1379,7 +1386,14 @@ public int MenuPlayersList_H(Menu mMenu, MenuAction mAction, int client, int par
 	}
 	return 0;
 }
-public void MenuTOP15(Database db, DBResultSet results, const char[] sError, int clientID)
+public void MenuTOP15(int client)
+{
+	char fQuery[128];
+	FormatEx(fQuery, sizeof(fQuery), "SELECT `player_name`, `kills` FROM `bf2_players` ORDER BY `kills` DESC LIMIT 15;");
+	gServerData.DBK.Query(MenuTOP15_S, fQuery, GetClientUserId(client));
+}
+
+public void MenuTOP15_S(Database db, DBResultSet results, const char[] sError, int clientID)
 {
 	int client = GetClientOfUserId(clientID);
 
@@ -1553,14 +1567,24 @@ public int MenuAdminBF2_ConfirmResetH(Menu mMenu, MenuAction mAction, int client
 
 		if ( item == 33 )
 		{
-			BF2_PrintToChat(client, "tb reset database");
-
 			char fQuery[1024];
 			FormatEx(fQuery, sizeof(fQuery), "TRUNCATE TABLE `bf2_players`;");
 			if ( !SQL_FastQuery(gServerData.DBK, fQuery, sizeof(fQuery)) ) {
 				char Error[256];
 				SQL_GetError(gServerData.DBK, Error, sizeof(Error));
 				LogToFile(FILELOG_ERROR, "[ERROR SQL] MenuAdminBF2_ConfirmResetH: %s", Error);
+
+				PrintToChat(client, "ERROR");
+				return 0;
+			}
+
+			ServerCommand("mp_restartgame 2");
+
+			BF2_PrintToChat(client, "tb reset database");
+			LoopClients(pID)
+			{
+				gClientInfo[pID].ResetVars(/*void*/);
+				sql_LoadDataClient(pID);
 			}
 		}
 	}
