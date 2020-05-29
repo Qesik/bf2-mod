@@ -171,8 +171,8 @@
 	"MenuClientStatsKillsAccuracy"	// menu
 	{
 		"#format"		"{1:d}"
-		"en"			"Global Accuracy: %d percent {1}"
-		"pl"			"Ogólna Celność: %d procent: {1}"
+		"en"			"Global Accuracy: {1} percent"
+		"pl"			"Ogólna Celność: {1} procent"
 	}
 	"MenuClientStatsPlantBomb"	// menu
 	{
@@ -570,8 +570,8 @@
 	}
 	"Info_Badge8"	// other
 	{
-		"en"			"% speed for all weapons"
-		"pl"			"% speed dla wszystkich broni"
+		"en"			"%% speed for all weapons"
+		"pl"			"%% speed dla wszystkich broni"
 	}
 
 	"Req_Badge1_Basic"	// other
@@ -621,8 +621,8 @@
 	}
 	"Req_Badge3_Veteran"	// other
 	{
-		"en"			"» Accuracy of 25% or higher"
-		"pl"			"» Celność równa lub wyższa od 25%"
+		"en"			"» Accuracy of 25%% or higher"
+		"pl"			"» Celność równa lub wyższa od 25%%"
 	}
 	"Req_Badge3_Expert"	// other
 	{
@@ -738,43 +738,43 @@
 
 	"Award_Badge1_Basic"	// other
 	{
-		"en"			"20% Knife damage returned as health"
-		"pl"			"20% obrażeń zadanych z nożem zamienia się w HP"
+		"en"			"20%% Knife damage returned as health"
+		"pl"			"20%% obrażeń zadanych z nożem zamienia się w HP"
 	}
 	"Award_Badge1_Veteran"	// other
 	{
-		"en"			"40% Knife damage returned as health"
-		"pl"			"40% obrażeń zadanych z nożem zamienia się w HP"
+		"en"			"40%% Knife damage returned as health"
+		"pl"			"40%% obrażeń zadanych z nożem zamienia się w HP"
 	}
 	"Award_Badge1_Expert"	// other
 	{
-		"en"			"60% Knife damage returned as health"
-		"pl"			"60% obrażeń zadanych z nożem zamienia się w HP"
+		"en"			"60%% Knife damage returned as health"
+		"pl"			"60%% obrażeń zadanych z nożem zamienia się w HP"
 	}
 	"Award_Badge1_Profesional"	// other
 	{
-		"en"			"80% Knife damage returned as health"
-		"pl"			"80% obrażeń zadanych z nożem zamienia się w HP"
+		"en"			"80%% Knife damage returned as health"
+		"pl"			"80%% obrażeń zadanych z nożem zamienia się w HP"
 	}
 	"Award_Badge2_Basic"	// other
 	{
-		"en"			"20% chance of freezing your enemy"
-		"pl"			"20% szansy na zamrożenia wroga"
+		"en"			"20%% chance of freezing your enemy"
+		"pl"			"20%% szansy na zamrożenia wroga"
 	}
 	"Award_Badge2_Veteran"	// other
 	{
-		"en"			"25% chance of freezing your enemy"
-		"pl"			"25% szansy na zamrożenia wroga"
+		"en"			"25%% chance of freezing your enemy"
+		"pl"			"25%% szansy na zamrożenia wroga"
 	}
 	"Award_Badge2_Expert"	// other
 	{
-		"en"			"33% chance of freezing your enemy"
-		"pl"			"33% szansy na zamrożenia wroga"
+		"en"			"33%% chance of freezing your enemy"
+		"pl"			"33%% szansy na zamrożenia wroga"
 	}
 	"Award_Badge2_Profesional"	// other
 	{
-		"en"			"50% chance of freezing your enemy"
-		"pl"			"50% szansy na zamrożenia wroga"
+		"en"			"50%% chance of freezing your enemy"
+		"pl"			"50%% szansy na zamrożenia wroga"
 	}
 	"Award_Badge3_Basic"	// other
 	{
@@ -838,23 +838,23 @@
 	}
 	"Award_Badge6_Basic"	// other
 	{
-		"en"			"20% more Grenade damage + 1/4 chance of getting a free HE"
-		"pl"			"20% więcej obrażeń + 1/4 na darmowe HE"
+		"en"			"20%% more Grenade damage + 1/4 chance of getting a free HE"
+		"pl"			"20%% więcej obrażeń + 1/4 na darmowe HE"
 	}
 	"Award_Badge6_Veteran"	// other
 	{
-		"en"			"40% more Grenade damage + 1/3 chance of getting a free HE"
-		"pl"			"40% więcej obrażeń + 1/3 na darmowe HE"
+		"en"			"40%% more Grenade damage + 1/3 chance of getting a free HE"
+		"pl"			"40%% więcej obrażeń + 1/3 na darmowe HE"
 	}
 	"Award_Badge6_Expert"	// other
 	{
-		"en"			"60% more Grenade damage + 1/2 chance of getting a free HE"
-		"pl"			"60% więcej obrażeń + 1/2 na darmowe HE"
+		"en"			"60%% more Grenade damage + 1/2 chance of getting a free HE"
+		"pl"			"60%% więcej obrażeń + 1/2 na darmowe HE"
 	}
 	"Award_Badge6_Profesional"	// other
 	{
-		"en"			"80% more Grenade damage + Free HE every spawn"
-		"pl"			"80% więcej obrażeń + Darmowe HE co rundę"
+		"en"			"80%% more Grenade damage + Free HE every spawn"
+		"pl"			"80%% więcej obrażeń + Darmowe HE co rundę"
 	}
 	"Award_Badge7_Basic"	// other
 	{
@@ -878,22 +878,22 @@
 	}
 	"Award_Badge8_Basic"	// other
 	{
-		"en"			"10% more speed for all weapons"
-		"pl"			"10% szybszy bieg na wszytkich broniach"
+		"en"			"10%% more speed for all weapons"
+		"pl"			"10%% szybszy bieg na wszytkich broniach"
 	}
 	"Award_Badge8_Veteran"	// other
 	{
-		"en"			"20% more speed for all weapons"
-		"pl"			"20% szybszy bieg na wszytkich broniach"
+		"en"			"20%% more speed for all weapons"
+		"pl"			"20%% szybszy bieg na wszytkich broniach"
 	}
 	"Award_Badge8_Expert"	// other
 	{
-		"en"			"30% more speed for all weapons"
-		"pl"			"30% szybszy bieg na wszytkich broniach"
+		"en"			"30%% more speed for all weapons"
+		"pl"			"30%% szybszy bieg na wszytkich broniach"
 	}
 	"Award_Badge8_Profesional"	// other
 	{
-		"en"			"40% more speed for all weapons"
-		"pl"			"40% szybszy bieg na wszytkich broniach"
+		"en"			"40%% more speed for all weapons"
+		"pl"			"40%% szybszy bieg na wszytkich broniach"
 	}
 }
