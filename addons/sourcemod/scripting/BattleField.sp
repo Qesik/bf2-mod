@@ -46,7 +46,7 @@ public Plugin myinfo =
 	name = "BattleField 2",
 	author = "-_- (Karol Skupień)",
 	description = "BattleField 2",
-	version = "1.15",
+	version = "1.2",
 	url = "https://github.com/Qesik/bf2-mod"
 };
 
@@ -1651,7 +1651,7 @@ public void Check_Badges(int client)
 		}
 		case LEVEL_VETERAN :
 		{
-			if ( gClientInfo[client].Stats[KILL_KNIFE] >= 100 || gClientInfo[client].sKillsRound[BADGE_KNIFE] >= 3 ) {
+			if ( gClientInfo[client].Stats[KILL_KNIFE] >= 100 && gClientInfo[client].sKillsRound[BADGE_KNIFE] >= 3 ) {
 				gClientInfo[client].mBadges[BADGE_KNIFE] = LEVEL_EXPERT;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_KNIFE][LEVEL_EXPERT]);
 				BF2_CreateOverlay(client, KNIFE_EXPERT);
@@ -1659,7 +1659,7 @@ public void Check_Badges(int client)
 		}
 		case LEVEL_EXPERT :
 		{
-			if ( gClientInfo[client].Stats[KILL_KNIFE] >= 200 || gClientInfo[client].sKillsRound[BADGE_KNIFE] >= 5 ) {
+			if ( gClientInfo[client].Stats[KILL_KNIFE] >= 200 && gClientInfo[client].sKillsRound[BADGE_KNIFE] >= 5 ) {
 				gClientInfo[client].mBadges[BADGE_KNIFE] = LEVEL_PROFESIONAL;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_KNIFE][LEVEL_PROFESIONAL]);
 				BF2_CreateOverlay(client, KNIFE_PROFESIONAL);
@@ -1688,7 +1688,7 @@ public void Check_Badges(int client)
 		case LEVEL_VETERAN :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_PISTOL] >= 200 || gClientInfo[client].sKillsRound[BADGE_PISTOL] >= 4 ||
+				gClientInfo[client].Stats[KILL_PISTOL] >= 200 && gClientInfo[client].sKillsRound[BADGE_PISTOL] >= 4 &&
 				gClientInfo[client].sKillsHSRound[BADGE_PISTOL] >= 2
 			) {
 				gClientInfo[client].mBadges[BADGE_PISTOL] = LEVEL_EXPERT;
@@ -1699,7 +1699,7 @@ public void Check_Badges(int client)
 		case LEVEL_EXPERT :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_PISTOL] >= 400 || gClientInfo[client].sKillsRound[BADGE_PISTOL] >= 6 ||
+				gClientInfo[client].Stats[KILL_PISTOL] >= 400 && gClientInfo[client].sKillsRound[BADGE_PISTOL] >= 6 &&
 				gClientInfo[client].sKillsHSRound[BADGE_PISTOL] >= 3
 			) {
 				gClientInfo[client].mBadges[BADGE_PISTOL] = LEVEL_PROFESIONAL;
@@ -1731,7 +1731,7 @@ public void Check_Badges(int client)
 		case LEVEL_VETERAN :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_ALL] >= 2000 || gClientInfo[client].sKillsRound[BADGE_ASSAULT] >= 5 ||
+				gClientInfo[client].Stats[KILL_ALL] >= 2000 && gClientInfo[client].sKillsRound[BADGE_ASSAULT] >= 5 &&
 				gClientInfo[client].sKillsHSRound[BADGE_ASSAULT] >= 3
 			) {
 				gClientInfo[client].mBadges[BADGE_ASSAULT] = LEVEL_EXPERT;
@@ -1742,7 +1742,7 @@ public void Check_Badges(int client)
 		case LEVEL_EXPERT :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_ALL] >= 4000 || gClientInfo[client].sKillsRound[BADGE_ASSAULT] >= 7 ||
+				gClientInfo[client].Stats[KILL_ALL] >= 4000 && gClientInfo[client].sKillsRound[BADGE_ASSAULT] >= 7 &&
 				gClientInfo[client].sKillsHSRound[BADGE_ASSAULT] >= 5
 			) {
 				gClientInfo[client].mBadges[BADGE_ASSAULT] = LEVEL_PROFESIONAL;
@@ -1773,7 +1773,7 @@ public void Check_Badges(int client)
 		case LEVEL_VETERAN :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_SNIPER] >= 200 || gClientInfo[client].sKillsRound[BADGE_SNIPER] >= 4 ||
+				gClientInfo[client].Stats[KILL_SNIPER] >= 200 && gClientInfo[client].sKillsRound[BADGE_SNIPER] >= 4 &&
 				gClientInfo[client].sKillsHSRound[BADGE_SNIPER - 1] >= 1
 			) {
 				gClientInfo[client].mBadges[BADGE_SNIPER] = LEVEL_EXPERT;
@@ -1784,7 +1784,7 @@ public void Check_Badges(int client)
 		case LEVEL_EXPERT :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_SNIPER] >= 400 || gClientInfo[client].sKillsRound[BADGE_SNIPER] >= 6 ||
+				gClientInfo[client].Stats[KILL_SNIPER] >= 400 && gClientInfo[client].sKillsRound[BADGE_SNIPER] >= 6 &&
 				gClientInfo[client].sKillsHSRound[BADGE_SNIPER - 1] >= 3
 			) {
 				gClientInfo[client].mBadges[BADGE_SNIPER] = LEVEL_PROFESIONAL;
@@ -1815,7 +1815,7 @@ public void Check_Badges(int client)
 		case LEVEL_VETERAN :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_M249] >= 200 || gClientInfo[client].sKillsRound[BADGE_SUPPORT] >= 4 ||
+				gClientInfo[client].Stats[KILL_M249] >= 200 && gClientInfo[client].sKillsRound[BADGE_SUPPORT] >= 4 &&
 				gClientInfo[client].sKillsHSRound[BADGE_SUPPORT - 1] >= 1
 			) {
 				gClientInfo[client].mBadges[BADGE_SUPPORT] = LEVEL_EXPERT;
@@ -1826,7 +1826,7 @@ public void Check_Badges(int client)
 		case LEVEL_EXPERT :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_M249] >= 400 || gClientInfo[client].sKillsRound[BADGE_SUPPORT] >= 6 ||
+				gClientInfo[client].Stats[KILL_M249] >= 400 && gClientInfo[client].sKillsRound[BADGE_SUPPORT] >= 6 &&
 				gClientInfo[client].sKillsHSRound[BADGE_SUPPORT - 1] >= 3
 			) {
 				gClientInfo[client].mBadges[BADGE_SUPPORT] = LEVEL_PROFESIONAL;
@@ -1893,7 +1893,7 @@ public void Check_Badges(int client)
 		case LEVEL_VETERAN :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_SHOTGUN] >= 200 || gClientInfo[client].sKillsRound[BADGE_SHOTGUN - 1] >= 4 ||
+				gClientInfo[client].Stats[KILL_SHOTGUN] >= 200 && gClientInfo[client].sKillsRound[BADGE_SHOTGUN - 1] >= 4 &&
 				gClientInfo[client].sKillsHSRound[BADGE_SHOTGUN - 2] >= 1
 			) {
 				gClientInfo[client].mBadges[BADGE_SHOTGUN] = LEVEL_EXPERT;
@@ -1904,7 +1904,7 @@ public void Check_Badges(int client)
 		case LEVEL_EXPERT :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_SHOTGUN] >= 500 || gClientInfo[client].sKillsRound[BADGE_SHOTGUN - 1] >= 6 ||
+				gClientInfo[client].Stats[KILL_SHOTGUN] >= 500 && gClientInfo[client].sKillsRound[BADGE_SHOTGUN - 1] >= 6 &&
 				gClientInfo[client].sKillsHSRound[BADGE_SHOTGUN - 2] >= 3
 			) {
 				gClientInfo[client].mBadges[BADGE_SHOTGUN] = LEVEL_PROFESIONAL;
@@ -1935,7 +1935,7 @@ public void Check_Badges(int client)
 		case LEVEL_VETERAN :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_SMG] >= 200 || gClientInfo[client].sKillsRound[BADGE_SMG - 1] >= 4 ||
+				gClientInfo[client].Stats[KILL_SMG] >= 200 && gClientInfo[client].sKillsRound[BADGE_SMG - 1] >= 4 &&
 				gClientInfo[client].sKillsHSRound[BADGE_SMG - 2] >= 1
 			) {
 				gClientInfo[client].mBadges[BADGE_SMG] = LEVEL_EXPERT;
@@ -1946,7 +1946,7 @@ public void Check_Badges(int client)
 		case LEVEL_EXPERT :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_SMG] >= 450 || gClientInfo[client].sKillsRound[BADGE_SMG - 1] >= 6 ||
+				gClientInfo[client].Stats[KILL_SMG] >= 450 && gClientInfo[client].sKillsRound[BADGE_SMG - 1] >= 6 &&
 				gClientInfo[client].sKillsHSRound[BADGE_SMG - 2] >= 3
 			) {
 				gClientInfo[client].mBadges[BADGE_SMG] = LEVEL_PROFESIONAL;
