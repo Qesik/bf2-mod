@@ -46,7 +46,7 @@ public Plugin myinfo =
 	name = "BattleField 2",
 	author = "-_- (Karol Skupień)",
 	description = "BattleField 2",
-	version = "1.2",
+	version = "1.3",
 	url = "https://github.com/Qesik/bf2-mod"
 };
 
@@ -60,12 +60,25 @@ enum struct ClientInfo
 	int mBadges[MAX_BADGES];
 	int mMedal[3];
 
+	int DogTag;
+
 	int sFrags;
 	int sShoot;
 	int sHit;
 	int sKillsRound[7];
 	int sKillsHSRound[6];
 	int MenuSelect;
+
+	Handle TimerHUD;
+
+	void DeleteTimers(/*void*/)
+	{
+		delete this.TimerHUD;
+	}
+	void PurgeTimers(/*void*/)
+	{
+		this.TimerHUD = null;
+	}
 
 	void ResetVars(/*void*/)
 	{
@@ -76,6 +89,8 @@ enum struct ClientInfo
 
 		for(int i = 0; i < MAX_BADGES; i++)	this.mBadges[i] = 0;
 		for(int i = 0; i < 3; i++) this.mMedal[i] = 0;
+
+		this.DogTag = 0;
 
 		this.sFrags = 0;
 		this.sShoot = 0;
@@ -96,6 +111,9 @@ enum struct ServerData
 	ConVar cVarXpMultiplier;
 	ConVar cVarScreenTime;
 	ConVar cVarOvLanguage;
+	ConVar cVarEnableHUD;
+
+	Handle HudAccount;
 
 	void ResetVars(/*void*/)
 	{
@@ -115,17 +133,11 @@ ServerData gServerData;
 	* * * * * * * * * * * * * * * * * * * * * * * *
 */
 char gRankName[ MAX_RANKS ][ ] = {
-	"Szeregowy", "Starszy Szeregowy", "Kapral", "Starszy Kapral", "Plutonowy",
-	"Sierżant", "Starszy Sierżant", "Młodyszy Chorąży", "Chorąży", "Starszy Chorąży",
-	"Podporucznik", "Porucznik", "Kapitan", "Major",
-	"Podpułkownik", "Pułkownik", "Generał Brygady"
+	"RankName_1", "RankName_2", "RankName_3", "RankName_4", "RankName_5",
+	"RankName_6", "RankName_7", "RankName_8", "RankName_9", "RankName_10",
+	"RankName_11", "RankName_12", "RankName_13", "RankName_14",
+	"RankName_15", "RankName_16", "RankName_17"
 };
-/*char gRankName[ MAX_RANKS ][ ] = {
-	"Private", "Private First Class", "Lance Corporal", "Corporal", "Sergeant",
-	"Staff Sergeant", "Gunnery Sergeant", "Master Sergeant", "Master Gunnery Sergeant", "2nd Lieutenant",
-	"1st Lieutenant", "Captain", "Major", "Lieutenant Colonel",
-	"Colonel", "Brigadier General", "Lieutenant General"
-};*/
 
 int gRankXP[ MAX_RANKS ] = {
 	0, 150, 500, 800, 2500,
@@ -136,14 +148,14 @@ int gRankXP[ MAX_RANKS ] = {
 
 
 char gBadgeName[ MAX_BADGES ][ 5 ][ ] = {
-	{ "", "Name_Badge1_Basic", "Name_Badge1_Veteran", "Name_Badge1_Expert", "Name_Badge1_Profesional" },
-	{ "", "Name_Badge2_Basic", "Name_Badge2_Veteran", "Name_Badge2_Expert", "Name_Badge2_Profesional" },
-	{ "", "Name_Badge3_Basic", "Name_Badge3_Veteran", "Name_Badge3_Expert", "Name_Badge3_Profesional" },
-	{ "", "Name_Badge4_Basic", "Name_Badge4_Veteran", "Name_Badge4_Expert", "Name_Badge4_Profesional" },
-	{ "", "Name_Badge5_Basic", "Name_Badge5_Veteran", "Name_Badge5_Expert", "Name_Badge5_Profesional" },
-	{ "", "Name_Badge6_Basic", "Name_Badge6_Veteran", "Name_Badge6_Expert", "Name_Badge6_Profesional" },
-	{ "", "Name_Badge7_Basic", "Name_Badge7_Veteran", "Name_Badge7_Expert", "Name_Badge7_Profesional" },
-	{ "", "Name_Badge8_Basic", "Name_Badge8_Veteran", "Name_Badge8_Expert", "Name_Badge8_Profesional" }
+	{ "Name_Badge1_Empty", "Name_Badge1_Basic", "Name_Badge1_Veteran", "Name_Badge1_Expert", "Name_Badge1_Profesional" },
+	{ "Name_Badge2_Empty", "Name_Badge2_Basic", "Name_Badge2_Veteran", "Name_Badge2_Expert", "Name_Badge2_Profesional" },
+	{ "Name_Badge3_Empty", "Name_Badge3_Basic", "Name_Badge3_Veteran", "Name_Badge3_Expert", "Name_Badge3_Profesional" },
+	{ "Name_Badge4_Empty", "Name_Badge4_Basic", "Name_Badge4_Veteran", "Name_Badge4_Expert", "Name_Badge4_Profesional" },
+	{ "Name_Badge5_Empty", "Name_Badge5_Basic", "Name_Badge5_Veteran", "Name_Badge5_Expert", "Name_Badge5_Profesional" },
+	{ "Name_Badge6_Empty", "Name_Badge6_Basic", "Name_Badge6_Veteran", "Name_Badge6_Expert", "Name_Badge6_Profesional" },
+	{ "Name_Badge7_Empty", "Name_Badge7_Basic", "Name_Badge7_Veteran", "Name_Badge7_Expert", "Name_Badge7_Profesional" },
+	{ "Name_Badge8_Empty", "Name_Badge8_Basic", "Name_Badge8_Veteran", "Name_Badge8_Expert", "Name_Badge8_Profesional" }
 };
 
 char gBadgeInfo[ MAX_BADGES ][ ] = {
@@ -169,14 +181,14 @@ char gBadgeInfoRequirements[ MAX_BADGES ][ 5 ][ ] = {
 };
 
 char gBadgeInfoAwards[ MAX_BADGES ][ 5 ][ ] = {
-	{ "", "Award_Badge1_Basic", "Award_Badge1_Veteran", "Award_Badge1_Expert", "Award_Badge1_Profesional" },
-	{ "", "Award_Badge2_Basic", "Award_Badge2_Veteran", "Award_Badge2_Expert", "Award_Badge2_Profesional" },
-	{ "", "Award_Badge3_Basic", "Award_Badge3_Veteran", "Award_Badge3_Expert", "Award_Badge3_Profesional" },
-	{ "", "Award_Badge4_Basic", "Award_Badge4_Veteran", "Award_Badge4_Expert", "Award_Badge4_Profesional" },
-	{ "", "Award_Badge5_Basic", "Award_Badge5_Veteran", "Award_Badge5_Expert", "Award_Badge5_Profesional" },
-	{ "", "Award_Badge6_Basic", "Award_Badge6_Veteran", "Award_Badge6_Expert", "Award_Badge6_Profesional" },
-	{ "", "Award_Badge7_Basic", "Award_Badge7_Veteran", "Award_Badge7_Expert", "Award_Badge7_Profesional" },
-	{ "", "Award_Badge8_Basic", "Award_Badge8_Veteran", "Award_Badge8_Expert", "Award_Badge8_Profesional" }
+	{ "Award_Nothing", "Award_Badge1_Basic", "Award_Badge1_Veteran", "Award_Badge1_Expert", "Award_Badge1_Profesional" },
+	{ "Award_Nothing", "Award_Badge2_Basic", "Award_Badge2_Veteran", "Award_Badge2_Expert", "Award_Badge2_Profesional" },
+	{ "Award_Nothing", "Award_Badge3_Basic", "Award_Badge3_Veteran", "Award_Badge3_Expert", "Award_Badge3_Profesional" },
+	{ "Award_Nothing", "Award_Badge4_Basic", "Award_Badge4_Veteran", "Award_Badge4_Expert", "Award_Badge4_Profesional" },
+	{ "Award_Nothing", "Award_Badge5_Basic", "Award_Badge5_Veteran", "Award_Badge5_Expert", "Award_Badge5_Profesional" },
+	{ "Award_Nothing", "Award_Badge6_Basic", "Award_Badge6_Veteran", "Award_Badge6_Expert", "Award_Badge6_Profesional" },
+	{ "Award_Nothing", "Award_Badge7_Basic", "Award_Badge7_Veteran", "Award_Badge7_Expert", "Award_Badge7_Profesional" },
+	{ "Award_Nothing", "Award_Badge8_Basic", "Award_Badge8_Veteran", "Award_Badge8_Expert", "Award_Badge8_Profesional" }
 };
 
 
@@ -189,8 +201,8 @@ int gChanceFreezeValue[ 5 ] = {
 int gHealthValue[ 5 ] = {
 	100, 110, 120, 130, 140
 };
-int gBonusDMG[ 5 ] = {
-	0, 2, 4, 6, 8
+float gMultiplierGravitation[ 5 ] = {
+	0.0, 0.08, 0.15, 0.2, 0.25
 };
 float gMultiplierDMGHE[ 5 ] = {
 	0.0, 0.15, 0.3, 0.45, 0.6
@@ -199,7 +211,7 @@ int gInvisAlphaValue[ 5 ] = {
 	255, 200, 180, 160, 140
 };
 float gMultiplierSpeed[ 5 ] = {
-	0.0, 0.1, 0.2, 0.3, 0.4
+	0.0, 0.08, 0.15, 0.2, 0.25
 };
 
 // =============================================================//
@@ -212,6 +224,8 @@ public void OnPluginStart(/*void*/)
 	OnRegCommand(/*void*/);
 	OnEvent(/*void*/);
 	OnCvar(/*void*/);
+
+	gServerData.HudAccount = CreateHudSynchronizer();
 }
 // =============================================================//
 // 							OnMapStart							//
@@ -226,12 +240,24 @@ public void OnMapStart(/*void*/)
 	sql_CreateDataBase(/*void*/);
 }
 // =============================================================//
+// 							OnMapEnd							//
+// =============================================================//
+public void OnMapEnd(/*void*/)
+{
+	for (int i = 1; i <= MaxClients; i++)
+	{
+		// Purge player timers
+		gClientInfo[i].PurgeTimers();
+	}
+}
+// =============================================================//
 // 						OnClientDisconnect						//
 // =============================================================//
 public void OnClientDisconnect(int client)
 {
 	sql_SaveDataClient(client);
 	gClientInfo[client].ResetVars(/*void*/);
+	gClientInfo[client].DeleteTimers(/*void*/);
 }
 // =============================================================//
 // 						OnClientPutInServer						//
@@ -243,6 +269,7 @@ public void OnClientPutInServer(int client)
 	SDKHook(client, SDKHook_WeaponSwitchPost,		sdk_WeaponSwitch);
 
 	gClientInfo[client].ResetVars(/*void*/);
+	gClientInfo[client].DeleteTimers(/*void*/);
 	sql_LoadDataClient(client);
 }
 /*
@@ -309,6 +336,7 @@ void sql_CreateDataBase(/*void*/)
 			`medal_gold` INT NOT NULL default 0, \
 			`medal_silver` INT NOT NULL default 0, \
 			`medal_bronze` INT NOT NULL default 0, \
+			`dog_tag` INT NOT NULL default 0, \
 			PRIMARY KEY (authID), \
 			UNIQUE (steamID) \
 			) ENGINE = InnoDB;")
@@ -343,7 +371,7 @@ public void sql_LoadDataClient(int client)
 		`badge1`, `badge2`, `badge3`, `badge4`, `badge5`, `badge6`, `badge7`, `badge8`, \
 		`kills`, `kills_knife`, `kills_pistol`, `kills_m249`, `kills_sniper`, `kills_rifle`, `kills_shotgun`, `kills_smg`, `kills_grenade`, \
 		`plant_bomb`, `explode_bomb`, `defuse_bomb`, \
-		`medal_gold`, `medal_silver`, `medal_bronze` \
+		`medal_gold`, `medal_silver`, `medal_bronze`, `dog_tag` \
 		FROM `bf2_players` WHERE `authID`='%d';",
 		authID);
 		gServerData.DBK.Query(sql_LoadDataClientH, fQuery, GetClientUserId(client), DBPrio_High);
@@ -375,6 +403,8 @@ public void sql_LoadDataClientH(Database db, DBResultSet results, const char[] s
 		for(int i = 0; i < 12; i++)	gClientInfo[client].Stats[i] = results.FetchInt(b++);
 		for(int i = 0; i < 3; i++)	gClientInfo[client].mMedal[i] = results.FetchInt(b++);
 
+		gClientInfo[client].DogTag = results.FetchInt(b);
+
 		BF_CheckRank(client, true);
 		
 		return;
@@ -394,13 +424,13 @@ public void sql_LoadDataClientH(Database db, DBResultSet results, const char[] s
 	`badge1`, `badge2`, `badge3`, `badge4`, `badge5`, `badge6`, `badge7`, `badge8`, \
 	`kills`, `kills_knife`, `kills_pistol`, `kills_m249`, `kills_sniper`, `kills_rifle`, `kills_shotgun`, `kills_smg`, `kills_grenade`, \
 	`plant_bomb`, `explode_bomb`, `defuse_bomb`, \
-	`medal_gold`, `medal_silver`, `medal_bronze`) \
+	`medal_gold`, `medal_silver`, `medal_bronze`, `dog_tag`) \
 	VALUES \
 	('%d', '%s', '%s', '%d', \
 	'0', '0', '0', '0', '0', '0', '0', '0', \
 	'0', '0', '0', '0', '0', '0', '0', '0', '0', \
 	'0', '0', '0', \
-	'0', '0', '0');",
+	'0', '0', '0', '0');",
 	GetSteamAccountID(client), steamID, pNameEscape, GetTime());
 	
 	if ( !SQL_FastQuery(gServerData.DBK, fQuery, sizeof(fQuery)) ) {
@@ -434,7 +464,7 @@ public void sql_SaveDataClient(int client)
 	`kills`='%d', `kills_knife`='%d', `kills_pistol`='%d', `kills_m249`='%d', `kills_sniper`='%d', `kills_rifle`='%d', \
 	`kills_shotgun`='%d', `kills_smg`='%d', `kills_grenade`='%d', \
 	`plant_bomb`='%d', `explode_bomb`='%d', `defuse_bomb`='%d', \
-	`medal_gold`='%d', `medal_silver`='%d', `medal_bronze`='%d' \
+	`medal_gold`='%d', `medal_silver`='%d', `medal_bronze`='%d', `dog_tag`='%d' \
 	WHERE `authID`='%d';", pNameEscape, GetTime(),
 	gClientInfo[client].mBadges[BADGE_KNIFE], gClientInfo[client].mBadges[BADGE_PISTOL], gClientInfo[client].mBadges[BADGE_ASSAULT],
 	gClientInfo[client].mBadges[BADGE_SNIPER], gClientInfo[client].mBadges[BADGE_SUPPORT], gClientInfo[client].mBadges[BADGE_EXPLOSIVES],
@@ -444,6 +474,7 @@ public void sql_SaveDataClient(int client)
 	gClientInfo[client].Stats[KILL_SHOTGUN], gClientInfo[client].Stats[KILL_SMG], gClientInfo[client].Stats[KILL_GRENADE], 
 	gClientInfo[client].Stats[PLANT_BOMB], gClientInfo[client].Stats[EXPLODE_BOMB], gClientInfo[client].Stats[DEFUSE_BOMB], 
 	gClientInfo[client].mMedal[MEDAL_GOLD], gClientInfo[client].mMedal[MEDAL_SILVER], gClientInfo[client].mMedal[MEDAL_BRONZE], 
+	gClientInfo[client].DogTag,
 	GetSteamAccountID(client));
 
 	if ( !SQL_FastQuery(gServerData.DBK, fQuery, sizeof(fQuery)) ) {
@@ -502,13 +533,23 @@ public Action ev_PlayerSpawn(Event hEvent, const char[] eName, bool dontBroadcas
 	if ( gClientInfo[client].mBadges[BADGE_SMG] )
 		SetEntPropFloat(client, Prop_Send, "m_flLaggedMovementValue", (1.0 + gMultiplierSpeed[gClientInfo[client].mBadges[BADGE_SMG]]));
 
-	if ( gClientInfo[client].mBadges[BADGE_SNIPER] && GetRandomInt(1, (5 - gClientInfo[client].mBadges[BADGE_SNIPER])) == 1 )
-		GivePlayerItem(client, "weapon_awp");
+	if ( gClientInfo[client].mBadges[BADGE_SUPPORT] )
+		SetEntityGravity(client, 1.0 - gMultiplierGravitation[gClientInfo[client].mBadges[BADGE_SUPPORT]]);
+
+	if ( gClientInfo[client].mBadges[BADGE_SNIPER] ) {
+		if ( gClientInfo[client].mBadges[BADGE_EXPLOSIVES] >= LEVEL_EXPERT && GetRandomInt(1, (6 - gClientInfo[client].mBadges[BADGE_SNIPER])) == 1 )
+			GivePlayerItem(client, "weapon_awp");
+		else if ( GetRandomInt(1, (6 - gClientInfo[client].mBadges[BADGE_SNIPER])) == 1 )
+			GivePlayerItem(client, "weapon_ssg08");
+	}
 
 	if ( gClientInfo[client].mBadges[BADGE_EXPLOSIVES] && GetRandomInt(1, (5 - gClientInfo[client].mBadges[BADGE_EXPLOSIVES])) == 1 )
 		GivePlayerItem(client, "weapon_hegrenade");
 
 	BF2_PrintToChat(client, "tb info rank", gRankName[gClientInfo[client].Rank], gClientInfo[client].Stats[KILL_ALL]);
+
+	if ( gServerData.cVarEnableHUD.IntValue && gClientInfo[client].TimerHUD == null )
+		gClientInfo[client].TimerHUD = CreateTimer(2.0, Timer_ShowHUD, GetClientUserId(client), TIMER_REPEAT | TIMER_FLAG_NO_MAPCHANGE);
 
 	return Plugin_Continue;
 }
@@ -545,7 +586,7 @@ public Action ev_PlayerDeath(Event hEvent, const char[] eName, bool dontBroadcas
 			gClientInfo[killer].Stats[KILL_PISTOL] ++;
 			gClientInfo[killer].sKillsRound[BADGE_PISTOL] ++;
 			if ( headshot )
-				gClientInfo[killer].sKillsHSRound[BADGE_PISTOL - 1] ++;
+				gClientInfo[killer].sKillsHSRound[0] ++;
 		}
 		case CSWeapon_HEGRENADE :
 		{
@@ -556,7 +597,7 @@ public Action ev_PlayerDeath(Event hEvent, const char[] eName, bool dontBroadcas
 			gClientInfo[killer].Stats[KILL_SHOTGUN] ++;
 			gClientInfo[killer].sKillsRound[BADGE_SHOTGUN - 1] ++;
 			if ( headshot )
-				gClientInfo[killer].sKillsHSRound[BADGE_SHOTGUN - 2] ++;
+				gClientInfo[killer].sKillsHSRound[4] ++;
 
 		}
 		case CSWeapon_MAC10, CSWeapon_UMP45, CSWeapon_MP5NAVY, CSWeapon_P90, CSWeapon_BIZON, CSWeapon_MP7, CSWeapon_MP9 :
@@ -564,28 +605,28 @@ public Action ev_PlayerDeath(Event hEvent, const char[] eName, bool dontBroadcas
 			gClientInfo[killer].Stats[KILL_SMG] ++;
 			gClientInfo[killer].sKillsRound[BADGE_SMG - 1] ++;
 			if ( headshot )
-				gClientInfo[killer].sKillsHSRound[BADGE_SMG - 2] ++;
+				gClientInfo[killer].sKillsHSRound[5] ++;
 		}
 		case CSWeapon_AUG, CSWeapon_FAMAS, CSWeapon_M4A1, CSWeapon_AK47, CSWeapon_GALILAR, CSWeapon_SG556, CSWeapon_M4A1_SILENCER :
 		{
 			gClientInfo[killer].Stats[KILL_RIFLE] ++;
 			gClientInfo[killer].sKillsRound[BADGE_ASSAULT] ++;
 			if ( headshot )
-				gClientInfo[killer].sKillsHSRound[BADGE_ASSAULT - 1] ++;
+				gClientInfo[killer].sKillsHSRound[1] ++;
 		}
 		case CSWeapon_AWP, CSWeapon_G3SG1, CSWeapon_SCAR20, CSWeapon_SSG08 :
 		{
 			gClientInfo[killer].Stats[KILL_SNIPER] ++;
 			gClientInfo[killer].sKillsRound[BADGE_SNIPER] ++;
 			if ( headshot )
-				gClientInfo[killer].sKillsHSRound[BADGE_SNIPER - 1] ++;
+				gClientInfo[killer].sKillsHSRound[2] ++;
 		}
-		case CSWeapon_M249 ://, CSWeapon_NEGEV :
+		case CSWeapon_M249 , CSWeapon_NEGEV :
 		{
 			gClientInfo[killer].Stats[KILL_M249] ++;
 			gClientInfo[killer].sKillsRound[BADGE_SUPPORT] ++;
 			if ( headshot )
-				gClientInfo[killer].sKillsHSRound[BADGE_SUPPORT - 1] ++;
+				gClientInfo[killer].sKillsHSRound[3] ++;
 		}
 		case CSWeapon_KNIFE, CSWeapon_KNIFE_GG, CSWeapon_KNIFE_T, CSWeapon_KNIFE_FLIP, CSWeapon_KNIFE_GUT, CSWeapon_KNIFE_KARAMBIT, 
 		CSWeapon_KNIFE_M9_BAYONET, CSWeapon_KNIFE_TATICAL, CSWeapon_KNIFE_FALCHION, CSWeapon_KNIFE_SURVIVAL_BOWIE, CSWeapon_KNIFE_BUTTERFLY,
@@ -631,7 +672,7 @@ public Action ev_BombDefused(Event hEvent, const char[] eName, bool dontBroadcas
 // =============================================================//
 public Action ev_CsWinPanelMatch(Event hEvent, const char[] eName, bool dontBroadcast)
 {
-	if ( GetClientCount(true) < 3 )
+	if ( GetClientCount(true) < 4 )
 		return Plugin_Continue;
 
 	SortByFrags();
@@ -698,12 +739,6 @@ public Action sdk_OnTakeDamage(int victim, int &attacker, int &inflictor, float 
 
 	if ( damagetype & DMG_BLAST && gClientInfo[attacker].mBadges[BADGE_EXPLOSIVES] > LEVEL_NONE )
 		new_damage += damage * gMultiplierDMGHE[gClientInfo[attacker].mBadges[BADGE_EXPLOSIVES]];
-	else if ( weapon != -1 && gClientInfo[attacker].mBadges[BADGE_SUPPORT] > LEVEL_NONE ) {
-		CSWeaponID wID = CS_ItemDefIndexToID(GetEntProp(weapon, Prop_Send, "m_iItemDefinitionIndex"));
-
-		if ( wID == CSWeapon_M249 )
-			new_damage += gBonusDMG[gClientInfo[attacker].mBadges[BADGE_SUPPORT]];
-	}
 
 	if ( new_damage != damage ) {
 		damage = new_damage;
@@ -775,6 +810,7 @@ void OnCvar(/*void*/)
 	gServerData.cVarMinPlayers = CreateConVar("bf2_min_players", "2", "Minimum players");
 	gServerData.cVarXpMultiplier = CreateConVar("bf2_xp_multiplier", "0.1", "Point multiplier needed to reach each level (float)");
 	gServerData.cVarScreenTime = CreateConVar("bf2_icon_time", "2.0", "Amount of time to display the rank icons (float)");
+	gServerData.cVarEnableHUD = CreateConVar("bf2_enable_hud", "1", "Enable HUD info");
 
 	AutoExecConfig(true, "BF2_Mod");
 }
@@ -1049,6 +1085,9 @@ public int MenuListRanks_H(Menu mMenu, MenuAction mAction, int client, int param
 public void MenuClientStats(int client, int who)
 {
 	int acc = RoundFloat( (float(gClientInfo[who].sHit) / float(gClientInfo[who].sShoot))* 100 );
+	if ( acc <= 0 )
+		acc = 0;
+
 	char fMenu[128];
 
 	SetGlobalTransTarget(client);
@@ -1446,12 +1485,12 @@ public int MenuTOP15_H(Menu mMenu, MenuAction mAction, int client, int param)
 // =============================================================//
 // 																//
 // 							MenuClientBadges					//
-//					Menu ze statystykami odznak gracza			//
+// 																//
 // 																//
 // =============================================================//
 public void MenuClientBadges(int client, int who)
 {
-	char fMenu[128];
+	char fMenu[128], uID[10];
 	bool find = false;
 
 	SetGlobalTransTarget(client);
@@ -1461,12 +1500,10 @@ public void MenuClientBadges(int client, int who)
 	mMenu.SetTitle(fMenu);
 
 	for(int i = 0; i < MAX_BADGES ; i++)
-	{
-		if ( gClientInfo[who].mBadges[i] == 0 )
-			continue;
-		
-		FormatEx(fMenu, sizeof(fMenu), "%t", gBadgeName[i][gClientInfo[who].mBadges[i]]);
-		mMenu.AddItem("", fMenu, ITEMDRAW_DISABLED);//(client == who ? ITEMDRAW_DEFAULT: ITEMDRAW_DISABLED));
+	{	
+		FormatEx(fMenu, sizeof(fMenu), "%t", gBadgeName[i][0]);
+		IntToString(GetClientUserId(who), uID, sizeof(uID));
+		mMenu.AddItem(uID, fMenu);
 		find = true;
 	}
 
@@ -1481,10 +1518,62 @@ public int MenuClientBadges_H(Menu mMenu, MenuAction mAction, int client, int pa
 {
 	if ( mAction == MenuAction_End )
 		delete mMenu;
+	else if ( mAction == MenuAction_Select ) {
+		char info[10];
+		mMenu.GetItem(param, info, sizeof(info));
+		int id2 = GetClientOfUserId(StringToInt(info));
+
+		if ( !IsValidClient(id2) )
+			return 0;
+			
+		MenuShowClientBadges(client, id2, param);
+	}
 
 	return 0;
 }
+// =============================================================//
+// 							MenuClientBadges					//
+// =============================================================//
+public void MenuShowClientBadges(int client, int who, int param)
+{
+	char fMenu[356];
+	SetGlobalTransTarget(client);
 
+	switch(param)
+	{
+		case BADGE_KNIFE : Format(fMenu, sizeof(fMenu), "%t", "Progress2", gClientInfo[client].Stats[KILL_KNIFE], gClientInfo[client].sKillsRound[0]);
+		case BADGE_PISTOL : Format(fMenu, sizeof(fMenu), "%t", "Progress1", gClientInfo[client].Stats[KILL_PISTOL], gClientInfo[client].sKillsRound[1], gClientInfo[client].sKillsHSRound[0]);
+		case BADGE_ASSAULT : Format(fMenu, sizeof(fMenu), "%t", "Progress1", gClientInfo[client].Stats[KILL_RIFLE], gClientInfo[client].sKillsRound[2], gClientInfo[client].sKillsHSRound[1]);
+		case BADGE_SNIPER : Format(fMenu, sizeof(fMenu), "%t", "Progress1", gClientInfo[client].Stats[KILL_SNIPER], gClientInfo[client].sKillsRound[3], gClientInfo[client].sKillsHSRound[2]);
+		case BADGE_SUPPORT : Format(fMenu, sizeof(fMenu), "%t", "Progress1", gClientInfo[client].Stats[KILL_M249], gClientInfo[client].sKillsRound[4], gClientInfo[client].sKillsHSRound[3]);
+		case BADGE_EXPLOSIVES : Format(fMenu, sizeof(fMenu), "%t", "Progress3", gClientInfo[client].Stats[KILL_GRENADE]);
+		case BADGE_SHOTGUN : Format(fMenu, sizeof(fMenu), "%t", "Progress1", gClientInfo[client].Stats[KILL_SHOTGUN], gClientInfo[client].sKillsRound[5], gClientInfo[client].sKillsHSRound[4]);
+		case BADGE_SMG : Format(fMenu, sizeof(fMenu), "%t", "Progress1", gClientInfo[client].Stats[KILL_SMG], gClientInfo[client].sKillsRound[6], gClientInfo[client].sKillsHSRound[5]);
+	}
+
+	int badges = gClientInfo[who].mBadges[param];
+
+	Menu mMenu = new Menu(MenuShowClientBadges_H);
+	Format(fMenu, sizeof(fMenu), "%t", "MenuShowClientBadgesTitle", who,
+	gBadgeName[param][badges], 
+	gBadgeInfoAwards[param][badges], 
+	fMenu);
+	mMenu.SetTitle(fMenu);
+
+	FormatEx(fMenu, sizeof(fMenu), "%t", "MenuBF2Title");
+	mMenu.AddItem("", fMenu);
+
+	mMenu.Display(client, 30);
+}
+public int MenuShowClientBadges_H(Menu mMenu, MenuAction mAction, int client, int param)
+{
+	if ( mAction == MenuAction_End )
+		delete mMenu;
+	else if ( mAction == MenuAction_Select )
+		MenuBF2(client);
+
+	return 0;
+}
 
 // =============================================================//
 // 							MenuAdminBF2						//
@@ -1699,8 +1788,8 @@ public void Check_Badges(int client)
 		case LEVEL_EXPERT :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_PISTOL] >= 400 && gClientInfo[client].sKillsRound[BADGE_PISTOL] >= 6 &&
-				gClientInfo[client].sKillsHSRound[BADGE_PISTOL] >= 3
+				gClientInfo[client].Stats[KILL_PISTOL] >= 400 && gClientInfo[client].sKillsRound[1] >= 6 &&
+				gClientInfo[client].sKillsHSRound[0] >= 3
 			) {
 				gClientInfo[client].mBadges[BADGE_PISTOL] = LEVEL_PROFESIONAL;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_PISTOL][LEVEL_PROFESIONAL]);
@@ -1709,7 +1798,6 @@ public void Check_Badges(int client)
 		}
 	}
 
-	int acc = RoundFloat( (float(gClientInfo[client].sHit) / float(gClientInfo[client].sShoot))* 100 );
 	switch(gClientInfo[client].mBadges[BADGE_ASSAULT])
 	{
 		case LEVEL_NONE :
@@ -1722,7 +1810,7 @@ public void Check_Badges(int client)
 		}
 		case LEVEL_BASIC :
 		{
-			if ( acc >= 25 ) {
+			if ( gClientInfo[client].Stats[KILL_RIFLE] >= 100 ) {
 				gClientInfo[client].mBadges[BADGE_ASSAULT] = LEVEL_VETERAN;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_ASSAULT][LEVEL_VETERAN]);
 				BF2_CreateOverlay(client, RIFLE_VETERAN);
@@ -1731,8 +1819,8 @@ public void Check_Badges(int client)
 		case LEVEL_VETERAN :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_ALL] >= 2000 && gClientInfo[client].sKillsRound[BADGE_ASSAULT] >= 5 &&
-				gClientInfo[client].sKillsHSRound[BADGE_ASSAULT] >= 3
+				gClientInfo[client].Stats[KILL_RIFLE] >= 600 && gClientInfo[client].sKillsRound[BADGE_ASSAULT] >= 5 &&
+				gClientInfo[client].sKillsHSRound[1] >= 3
 			) {
 				gClientInfo[client].mBadges[BADGE_ASSAULT] = LEVEL_EXPERT;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_ASSAULT][LEVEL_EXPERT]);
@@ -1742,8 +1830,8 @@ public void Check_Badges(int client)
 		case LEVEL_EXPERT :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_ALL] >= 4000 && gClientInfo[client].sKillsRound[BADGE_ASSAULT] >= 7 &&
-				gClientInfo[client].sKillsHSRound[BADGE_ASSAULT] >= 5
+				gClientInfo[client].Stats[KILL_RIFLE] >= 1500 && gClientInfo[client].sKillsRound[BADGE_ASSAULT] >= 7 &&
+				gClientInfo[client].sKillsHSRound[1] >= 5
 			) {
 				gClientInfo[client].mBadges[BADGE_ASSAULT] = LEVEL_PROFESIONAL;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_ASSAULT][LEVEL_PROFESIONAL]);
@@ -1774,7 +1862,7 @@ public void Check_Badges(int client)
 		{
 			if ( 
 				gClientInfo[client].Stats[KILL_SNIPER] >= 200 && gClientInfo[client].sKillsRound[BADGE_SNIPER] >= 4 &&
-				gClientInfo[client].sKillsHSRound[BADGE_SNIPER - 1] >= 1
+				gClientInfo[client].sKillsHSRound[2] >= 1
 			) {
 				gClientInfo[client].mBadges[BADGE_SNIPER] = LEVEL_EXPERT;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_SNIPER][LEVEL_EXPERT]);
@@ -1785,7 +1873,7 @@ public void Check_Badges(int client)
 		{
 			if ( 
 				gClientInfo[client].Stats[KILL_SNIPER] >= 400 && gClientInfo[client].sKillsRound[BADGE_SNIPER] >= 6 &&
-				gClientInfo[client].sKillsHSRound[BADGE_SNIPER - 1] >= 3
+				gClientInfo[client].sKillsHSRound[2] >= 3
 			) {
 				gClientInfo[client].mBadges[BADGE_SNIPER] = LEVEL_PROFESIONAL;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_SNIPER][LEVEL_PROFESIONAL]);
@@ -1816,7 +1904,7 @@ public void Check_Badges(int client)
 		{
 			if ( 
 				gClientInfo[client].Stats[KILL_M249] >= 200 && gClientInfo[client].sKillsRound[BADGE_SUPPORT] >= 4 &&
-				gClientInfo[client].sKillsHSRound[BADGE_SUPPORT - 1] >= 1
+				gClientInfo[client].sKillsHSRound[3] >= 1
 			) {
 				gClientInfo[client].mBadges[BADGE_SUPPORT] = LEVEL_EXPERT;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_SUPPORT][LEVEL_EXPERT]);
@@ -1827,7 +1915,7 @@ public void Check_Badges(int client)
 		{
 			if ( 
 				gClientInfo[client].Stats[KILL_M249] >= 400 && gClientInfo[client].sKillsRound[BADGE_SUPPORT] >= 6 &&
-				gClientInfo[client].sKillsHSRound[BADGE_SUPPORT - 1] >= 3
+				gClientInfo[client].sKillsHSRound[3] >= 3
 			) {
 				gClientInfo[client].mBadges[BADGE_SUPPORT] = LEVEL_PROFESIONAL;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_SUPPORT][LEVEL_PROFESIONAL]);
@@ -1894,7 +1982,7 @@ public void Check_Badges(int client)
 		{
 			if ( 
 				gClientInfo[client].Stats[KILL_SHOTGUN] >= 200 && gClientInfo[client].sKillsRound[BADGE_SHOTGUN - 1] >= 4 &&
-				gClientInfo[client].sKillsHSRound[BADGE_SHOTGUN - 2] >= 1
+				gClientInfo[client].sKillsHSRound[4] >= 1
 			) {
 				gClientInfo[client].mBadges[BADGE_SHOTGUN] = LEVEL_EXPERT;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_SHOTGUN][LEVEL_EXPERT]);
@@ -1905,7 +1993,7 @@ public void Check_Badges(int client)
 		{
 			if ( 
 				gClientInfo[client].Stats[KILL_SHOTGUN] >= 500 && gClientInfo[client].sKillsRound[BADGE_SHOTGUN - 1] >= 6 &&
-				gClientInfo[client].sKillsHSRound[BADGE_SHOTGUN - 2] >= 3
+				gClientInfo[client].sKillsHSRound[4] >= 3
 			) {
 				gClientInfo[client].mBadges[BADGE_SHOTGUN] = LEVEL_PROFESIONAL;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_SHOTGUN][LEVEL_PROFESIONAL]);
@@ -1935,8 +2023,8 @@ public void Check_Badges(int client)
 		case LEVEL_VETERAN :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_SMG] >= 200 && gClientInfo[client].sKillsRound[BADGE_SMG - 1] >= 4 &&
-				gClientInfo[client].sKillsHSRound[BADGE_SMG - 2] >= 1
+				gClientInfo[client].Stats[KILL_SMG] >= 450 && gClientInfo[client].sKillsRound[BADGE_SMG - 1] >= 4 &&
+				gClientInfo[client].sKillsHSRound[5] >= 1
 			) {
 				gClientInfo[client].mBadges[BADGE_SMG] = LEVEL_EXPERT;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_SMG][LEVEL_EXPERT]);
@@ -1946,8 +2034,8 @@ public void Check_Badges(int client)
 		case LEVEL_EXPERT :
 		{
 			if ( 
-				gClientInfo[client].Stats[KILL_SMG] >= 450 && gClientInfo[client].sKillsRound[BADGE_SMG - 1] >= 6 &&
-				gClientInfo[client].sKillsHSRound[BADGE_SMG - 2] >= 3
+				gClientInfo[client].Stats[KILL_SMG] >= 950 && gClientInfo[client].sKillsRound[BADGE_SMG - 1] >= 6 &&
+				gClientInfo[client].sKillsHSRound[5] >= 3
 			) {
 				gClientInfo[client].mBadges[BADGE_SMG] = LEVEL_PROFESIONAL;
 				BF2_PrintToChat(client, "tb new badges", gBadgeName[BADGE_SMG][LEVEL_PROFESIONAL]);
@@ -2018,7 +2106,34 @@ public Action Timer_RemoveOverlay(Handle timer, const int clientID)
 		ClientCommand(client, "r_screenoverlay \"\"");
 		SetCommandFlags("r_screenoverlay", GetCommandFlags("r_screenoverlay") | FCVAR_CHEAT);
 	}
+}
 
+public Action Timer_ShowHUD(Handle timer, int clientID)
+{
+	int client = GetClientOfUserId(clientID);
+
+	if ( !client || !gServerData.cVarEnableHUD.IntValue ) {
+		gClientInfo[client].TimerHUD = null;
+		return Plugin_Stop;
+	}
+
+	int target = IsPlayerAlive(client) ? client : GetEntPropEnt(client, Prop_Send, "m_hObserverTarget");
+	if ( !IsValidClient(target) )
+		return Plugin_Continue;
+
+	BF2_TranslationPrintHudText(
+		gServerData.HudAccount, client, 
+		HUD_X, HUD_Y, 
+		2.2, 
+		0, 255, 0, 255, 
+		0, 
+		0.0, 0.0, 0.0, 
+		"info_hud", 
+		gClientInfo[target].Stats[KILL_ALL], RoundFloat(gRankXP[gClientInfo[target].Rank + 1] * gServerData.cVarXpMultiplier.FloatValue),
+		gRankName[gClientInfo[target].Rank]
+	);
+
+	return Plugin_Continue;
 }
 /*
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -2073,6 +2188,86 @@ void onMapDownload(/*void*/)
 	BF2_Download(SMG_VETERAN);
 	BF2_Download(SMG_EXPERT);
 	BF2_Download(SMG_PROFESIONAL);
+}
+/*
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*/
+public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max)
+{
+	RegPluginLibrary("battlefield2");
+	
+	CreateNative("bf2_get_rank",	Native_GetRank);
+
+	CreateNative("bf2_get_level_badge",	Native_GetLevelBadge);
+	CreateNative("bf2_set_level_badge",	Native_SetLevelBadge);
+
+	CreateNative("bf2_get_dogtag",	Native_GetDogTag);
+	CreateNative("bf2_set_dogtag",	Native_SetDogTag);
+}
+
+public int Native_GetRank(Handle plugin, int numParams)
+{
+	int client = GetNativeCell(1);
+	if ( gClientInfo[client].Rank < 0)
+		return -1;
+		
+	return gClientInfo[GetNativeCell(1)].Rank;
+}
+
+public int Native_GetLevelBadge(Handle plugin, int numParams)
+{
+	int badge = GetNativeCell(2);
+	if ( badge < 0 || badge >= MAX_BADGES )
+		return -1;
+		
+	return gClientInfo[GetNativeCell(1)].mBadges[badge];
+}
+public int Native_SetLevelBadge(Handle plugin, int numParams)
+{
+	int client = GetNativeCell(1);
+	if ( !gClientInfo[client].LoadData )
+		return -1;
+
+	int badge = GetNativeCell(2);
+	if ( badge < BADGE_KNIFE || badge >= MAX_BADGES )
+		return -1;
+
+	int level = GetNativeCell(3);
+	if ( level < LEVEL_NONE || level > LEVEL_PROFESIONAL )
+		return -1;
+
+	gClientInfo[client].mBadges[badge] = level;
+
+	return 1;
+}
+
+public int Native_GetDogTag(Handle plugin, int numParams)
+{
+	return gClientInfo[GetNativeCell(1)].DogTag;
+}
+public int Native_SetDogTag(Handle plugin, int numParams)
+{
+	int client = GetNativeCell(1);
+	if ( !gClientInfo[client].LoadData )
+		return -1;
+
+	gClientInfo[client].DogTag = GetNativeCell(2);
+
+	return 1;
 }
 /*
 	* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -2148,6 +2343,21 @@ void BF2_TranslationPrintToChatAll(any ...)
             
             PrintToChat(pID, sText);
         }
+    }
+}
+/*					*/
+void BF2_TranslationPrintHudText(Handle hSync, const int client, const float x, const float y, const float holdTime, const int r, const int g, const int b, const int a, const int effect, const float fxTime, const float fadeIn, const float fadeOut, any ...)
+{
+    if(!IsFakeClient(client))
+    {
+        SetGlobalTransTarget(client);
+
+        static char sTranslation[192];
+        VFormat(sTranslation, 192, "%t", 14);
+
+        SetHudTextParams(x, y, holdTime, r, g, b, a, effect, fxTime, fadeIn, fadeOut);
+
+        ShowSyncHudText(client, hSync, "%s", sTranslation);
     }
 }
 /*					*/
